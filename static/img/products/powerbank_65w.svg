@@ -1,0 +1,127 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 337" width="100%" height="100%">
+  <defs>
+    <!-- Background Grid -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>
+    </pattern>
+    <!-- Glow Filters -->
+    <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="4" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <filter id="softGlow" x="-10%" y="-10%" width="120%" height="120%">
+      <feGaussianBlur stdDeviation="2" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="bodyGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#242424"/>
+      <stop offset="50%" stop-color="#181818"/>
+      <stop offset="100%" stop-color="#121212"/>
+    </linearGradient>
+    <linearGradient id="cellGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#2a2a2a"/>
+      <stop offset="50%" stop-color="#1c1c1c"/>
+      <stop offset="100%" stop-color="#151515"/>
+    </linearGradient>
+    <linearGradient id="accentLine" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" stop-color="rgba(255,255,255,0.1)"/>
+      <stop offset="50%" stop-color="#ffffff"/>
+      <stop offset="100%" stop-color="rgba(255,255,255,0.1)"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="337" fill="#111111"/>
+  <rect width="600" height="337" fill="url(#grid)"/>
+
+  <!-- Tech HUD Frame / Accents -->
+  <g stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none">
+    <path d="M 20 35 L 20 20 L 35 20" />
+    <path d="M 580 35 L 580 20 L 565 20" />
+    <path d="M 20 302 L 20 317 L 35 317" />
+    <path d="M 580 302 L 580 317 L 565 317" />
+  </g>
+  <text x="35" y="32" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="2">MONO // POWER SYSTEM 65W</text>
+  <text x="565" y="32" text-anchor="end" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="1">30000mAh • 21700</text>
+
+  <!-- Battery Cells Outline (Behind / Internal View Concept) -->
+  <g transform="translate(110, 85)" opacity="0.35">
+    <rect x="0" y="0" width="45" height="150" rx="8" fill="url(#cellGrad)" stroke="#555" stroke-width="1.5"/>
+    <rect x="12" y="-5" width="21" height="5" rx="2" fill="#777"/>
+    <text x="22" y="80" fill="#888" font-family="monospace" font-size="9" transform="rotate(-90 22 80)" text-anchor="middle">21700 CELL</text>
+
+    <rect x="52" y="0" width="45" height="150" rx="8" fill="url(#cellGrad)" stroke="#555" stroke-width="1.5"/>
+    <rect x="64" y="-5" width="21" height="5" rx="2" fill="#777"/>
+    <text x="74" y="80" fill="#888" font-family="monospace" font-size="9" transform="rotate(-90 74 80)" text-anchor="middle">21700 CELL</text>
+
+    <rect x="104" y="0" width="45" height="150" rx="8" fill="url(#cellGrad)" stroke="#555" stroke-width="1.5"/>
+    <rect x="116" y="-5" width="21" height="5" rx="2" fill="#777"/>
+    <text x="126" y="80" fill="#888" font-family="monospace" font-size="9" transform="rotate(-90 126 80)" text-anchor="middle">21700 CELL</text>
+  </g>
+
+  <!-- Main Powerbank Housing -->
+  <g transform="translate(260, 68)">
+    <!-- Shadow -->
+    <rect x="8" y="8" width="225" height="195" rx="14" fill="#000000" opacity="0.6"/>
+    <!-- Outer Shell -->
+    <rect x="0" y="0" width="225" height="195" rx="14" fill="url(#bodyGrad)" stroke="#3a3a3a" stroke-width="2"/>
+    <!-- Chamfer / Bevel Inner Line -->
+    <rect x="5" y="5" width="215" height="185" rx="10" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+    <!-- Top Ports Bezel -->
+    <rect x="25" y="10" width="175" height="26" rx="4" fill="#0d0d0d" stroke="#2a2a2a" stroke-width="1"/>
+    <!-- Port 1: Type-C IN/OUT 1 -->
+    <rect x="36" y="18" width="26" height="10" rx="4" fill="#1e1e1e" stroke="#555" stroke-width="1"/>
+    <!-- Port 2: Type-C OUT 2 -->
+    <rect x="74" y="18" width="26" height="10" rx="4" fill="#1e1e1e" stroke="#555" stroke-width="1"/>
+    <!-- Port 3: USB-A 1 -->
+    <rect x="112" y="17" width="34" height="12" rx="2" fill="#1e1e1e" stroke="#555" stroke-width="1"/>
+    <!-- Port 4: USB-A 2 -->
+    <rect x="156" y="17" width="34" height="12" rx="2" fill="#1e1e1e" stroke="#555" stroke-width="1"/>
+
+    <!-- OLED Display Screen -->
+    <rect x="25" y="52" width="175" height="65" rx="8" fill="#050505" stroke="#333" stroke-width="1.5"/>
+    <rect x="30" y="57" width="165" height="55" rx="5" fill="#0a0f0d" stroke="rgba(255,255,255,0.05)" stroke-width="1"/>
+
+    <!-- Display Content (White High Contrast Glow) -->
+    <g filter="url(#softGlow)">
+      <!-- Lightning Icon -->
+      <polygon points="46,75 54,75 51,84 57,84 45,98 48,87 42,87" fill="#ffffff"/>
+      <!-- Percentage -->
+      <text x="64" y="93" fill="#ffffff" font-family="'Inter', sans-serif" font-weight="800" font-size="26" letter-spacing="-0.5">100%</text>
+      <!-- Sub info -->
+      <text x="135" y="78" fill="#ffffff" font-family="monospace" font-size="11" font-weight="700">65W PD</text>
+      <text x="135" y="94" fill="#888888" font-family="monospace" font-size="10">20.0V 3.25A</text>
+    </g>
+
+    <!-- Battery Status Bars -->
+    <g transform="translate(42, 102)" fill="#ffffff" opacity="0.9">
+      <rect x="0" y="0" width="15" height="3" rx="1"/>
+      <rect x="18" y="0" width="15" height="3" rx="1"/>
+      <rect x="36" y="0" width="15" height="3" rx="1"/>
+      <rect x="54" y="0" width="15" height="3" rx="1"/>
+      <rect x="72" y="0" width="15" height="3" rx="1"/>
+    </g>
+
+    <!-- Branding & Tech Specs Engraving -->
+    <line x1="25" y1="135" x2="200" y2="135" stroke="url(#accentLine)" stroke-width="1"/>
+    <text x="25" y="154" fill="#ffffff" font-family="'Inter', sans-serif" font-weight="800" font-size="14" letter-spacing="2">MONO.DROP</text>
+    <text x="25" y="172" fill="#777777" font-family="monospace" font-size="9" letter-spacing="1">LITHIUM-ION 30000mAh 111Wh</text>
+    <text x="200" y="172" text-anchor="end" fill="#555555" font-family="monospace" font-size="8">PD 3.0 / QC 4.0</text>
+  </g>
+
+  <!-- Electrical Circuit Trace Decoration -->
+  <path d="M 50 168 L 110 168 L 140 210 L 230 210" fill="none" stroke="rgba(255,255,255,0.12)" stroke-width="1.5" stroke-dasharray="4 4"/>
+  <circle cx="50" cy="168" r="3" fill="#ffffff" filter="url(#softGlow)"/>
+  <circle cx="230" cy="210" r="3" fill="#ffffff" filter="url(#softGlow)"/>
+
+  <!-- Footer Tag -->
+  <rect x="235" y="295" width="130" height="22" rx="11" fill="#1b1b1b" stroke="#333" stroke-width="1"/>
+  <text x="300" y="310" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-size="10" font-weight="600" letter-spacing="1">⚡ 65W FAST CHARGE</text>
+</svg>

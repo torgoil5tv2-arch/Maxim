@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Local environment and binaries
+.env
+venv/
+.venv/
+env/
+ENV/
+cloudflared.exe
+*.log
+CURRENT_LINK.txt
+
+# OS generated files
+.DS_Store
+Thumbs.db
+desktop.ini

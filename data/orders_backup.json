@@ -1,0 +1,47 @@
+[
+  {
+    "order_id": 1793808313,
+    "created_at": "2026-11-04 18:05:13",
+    "client": {
+      "name": "Іван Тестовий",
+      "phone": "+380501234567",
+      "delivery": "м. Львів, відділення №1",
+      "comment": "@ivantest"
+    },
+    "product": {
+      "id": 1,
+      "title": "Павербанк Baseus Blade 20000mAh 100W",
+      "price": 2899
+    }
+  },
+  {
+    "order_id": 1793897964,
+    "created_at": "2026-11-05 18:59:24",
+    "client": {
+      "name": "Тестер Олексій",
+      "phone": "+380501112233",
+      "delivery": "м. Київ, відділення №1",
+      "comment": "@tester"
+    },
+    "product": {
+      "id": 1,
+      "title": "Test Product",
+      "price": 2650
+    }
+  },
+  {
+    "order_id": 1793898983,
+    "created_at": "2026-11-05 19:16:23",
+    "client": {
+      "name": "Олексій Тестер",
+      "phone": "+380501234567",
+      "delivery": "Київ, Відділення 25",
+      "comment": "@monotester"
+    },
+    "product": {
+      "id": 1,
+      "title": "Кастомна збірка Li-Ion 30000mAh PD 65W",
+      "price": 2650
+    }
+  }
+]

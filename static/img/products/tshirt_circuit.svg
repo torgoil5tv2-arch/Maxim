@@ -1,0 +1,124 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 337" width="100%" height="100%">
+  <defs>
+    <!-- Background Grid -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>
+    </pattern>
+    <filter id="circuitGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="1.5" result="blur"/>
+      <feMerge>
+        <feMergeNode in="blur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+    <!-- Acid Wash Noise Texture -->
+    <filter id="acidWashTexture" x="0%" y="0%" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.04" numOctaves="4" result="noise"/>
+      <feColorMatrix type="matrix" values="1 0 0 0 0.12  0 1 0 0 0.12  0 0 1 0 0.12  0 0 0 0.25 0" in="noise" result="coloredNoise"/>
+      <feComposite operator="in" in2="SourceGraphic"/>
+    </filter>
+    <linearGradient id="teeGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#242424"/>
+      <stop offset="50%" stop-color="#181818"/>
+      <stop offset="100%" stop-color="#111111"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="337" fill="#111111"/>
+  <rect width="600" height="337" fill="url(#grid)"/>
+
+  <!-- Tech HUD Frame -->
+  <g stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none">
+    <path d="M 20 35 L 20 20 L 35 20" />
+    <path d="M 580 35 L 580 20 L 565 20" />
+    <path d="M 20 302 L 20 317 L 35 317" />
+    <path d="M 580 302 L 580 317 L 565 317" />
+  </g>
+  <text x="35" y="32" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="2">MONO // ACID WASH APPAREL</text>
+  <text x="565" y="32" text-anchor="end" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="1">250 GSM • BOXY STREETWEAR</text>
+
+  <!-- T-Shirt Boxy Fit Silhouette -->
+  <g transform="translate(135, 52)">
+    <!-- Shadow -->
+    <polygon points="120,8 145,22 185,22 210,8 265,30 325,82 290,118 265,95 265,225 65,225 65,95 40,118 5,82 65,30" fill="#000000" opacity="0.5" transform="translate(6, 6)"/>
+
+    <!-- Main T-Shirt Body -->
+    <path d="M 120 8 
+             Q 165 24 210 8 
+             L 268 30 
+             L 326 82 
+             L 288 118 
+             L 264 94 
+             L 264 226 
+             L 66 226 
+             L 66 94 
+             L 42 118 
+             L 4 82 
+             L 62 30 Z" 
+          fill="url(#teeGrad)" stroke="#383838" stroke-width="1.8"/>
+
+    <!-- Acid Wash Subtle Cloudy Patterns -->
+    <ellipse cx="110" cy="120" rx="35" ry="40" fill="rgba(255,255,255,0.03)"/>
+    <ellipse cx="220" cy="160" rx="40" ry="30" fill="rgba(255,255,255,0.035)"/>
+    <ellipse cx="140" cy="190" rx="50" ry="25" fill="rgba(255,255,255,0.025)"/>
+    <ellipse cx="210" cy="80" rx="25" ry="25" fill="rgba(255,255,255,0.03)"/>
+
+    <!-- Ribbed Thick Collar (Neckline) -->
+    <path d="M 120 8 Q 165 24 210 8 Q 165 30 120 8 Z" fill="#141414" stroke="#444" stroke-width="1.2"/>
+
+    <!-- DARK CIRCUIT Chest Microchip Art -->
+    <g transform="translate(165, 126)">
+      <!-- Outer Hex/Circuit Frame -->
+      <rect x="-55" y="-55" width="110" height="110" rx="8" fill="#131313" stroke="#333" stroke-width="1.5"/>
+      <!-- Inner Chip Core -->
+      <rect x="-30" y="-30" width="60" height="60" rx="4" fill="#1f1f1f" stroke="#ffffff" stroke-width="1.5" filter="url(#circuitGlow)"/>
+
+      <!-- Chip Pins -->
+      <g stroke="#ffffff" stroke-width="1.2" opacity="0.8">
+        <!-- Top pins -->
+        <line x1="-20" y1="-30" x2="-20" y2="-42"/>
+        <line x1="-10" y1="-30" x2="-10" y2="-45"/>
+        <line x1="0" y1="-30" x2="0" y2="-42"/>
+        <line x1="10" y1="-30" x2="10" y2="-45"/>
+        <line x1="20" y1="-30" x2="20" y2="-42"/>
+        <!-- Bottom pins -->
+        <line x1="-20" y1="30" x2="-20" y2="42"/>
+        <line x1="-10" y1="30" x2="-10" y2="45"/>
+        <line x1="0" y1="30" x2="0" y2="42"/>
+        <line x1="10" y1="30" x2="10" y2="45"/>
+        <line x1="20" y1="30" x2="20" y2="42"/>
+        <!-- Left pins -->
+        <line x1="-30" y1="-15" x2="-45" y2="-15"/>
+        <line x1="-30" y1="0" x2="-42" y2="0"/>
+        <line x1="-30" y1="15" x2="-45" y2="15"/>
+        <!-- Right pins -->
+        <line x1="30" y1="-15" x2="45" y2="-15"/>
+        <line x1="30" y1="0" x2="42" y2="0"/>
+        <line x1="30" y1="15" x2="45" y2="15"/>
+      </g>
+
+      <!-- Center Typography on Chip -->
+      <text x="0" y="-4" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-weight="900" font-size="9" letter-spacing="2">DARK</text>
+      <text x="0" y="8" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-weight="900" font-size="9" letter-spacing="2">CIRCUIT</text>
+      <text x="0" y="20" text-anchor="middle" fill="#666" font-family="monospace" font-size="7">SYSTEM 01</text>
+    </g>
+  </g>
+
+  <!-- Left / Right Specs Labels -->
+  <g transform="translate(45, 140)">
+    <text x="0" y="0" fill="#666" font-family="monospace" font-size="10">PROCESS:</text>
+    <text x="0" y="16" fill="#ccc" font-family="'Inter', sans-serif" font-weight="700" font-size="11">ACID WASH</text>
+    <text x="0" y="32" fill="#888" font-family="'Inter', sans-serif" font-size="10">VINTAGE PATTERN</text>
+  </g>
+
+  <g transform="translate(485, 140)">
+    <text x="0" y="0" fill="#666" font-family="monospace" font-size="10">WEIGHT:</text>
+    <text x="0" y="16" fill="#ccc" font-family="'Inter', sans-serif" font-weight="700" font-size="11">250 G/M²</text>
+    <text x="0" y="32" fill="#888" font-family="'Inter', sans-serif" font-size="10">HEAVY COTTON</text>
+  </g>
+
+  <!-- Footer Tag -->
+  <rect x="220" y="295" width="160" height="22" rx="11" fill="#1b1b1b" stroke="#333" stroke-width="1"/>
+  <text x="300" y="310" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-size="10" font-weight="600" letter-spacing="1">👕 ВІНТАЖНА ВАРКА</text>
+</svg>

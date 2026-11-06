@@ -1,0 +1,113 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 600 337" width="100%" height="100%">
+  <defs>
+    <!-- Background Grid -->
+    <pattern id="grid" width="30" height="30" patternUnits="userSpaceOnUse">
+      <path d="M 30 0 L 0 0 0 30" fill="none" stroke="rgba(255,255,255,0.035)" stroke-width="1"/>
+    </pattern>
+    <filter id="ledGlow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="3" result="blur" />
+      <feMerge>
+        <feMergeNode in="blur" />
+        <feMergeNode in="SourceGraphic" />
+      </feMerge>
+    </filter>
+    <linearGradient id="upsBody" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#282828"/>
+      <stop offset="60%" stop-color="#1c1c1c"/>
+      <stop offset="100%" stop-color="#141414"/>
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="600" height="337" fill="#111111"/>
+  <rect width="600" height="337" fill="url(#grid)"/>
+
+  <!-- Tech HUD Frame -->
+  <g stroke="rgba(255,255,255,0.15)" stroke-width="1" fill="none">
+    <path d="M 20 35 L 20 20 L 35 20" />
+    <path d="M 580 35 L 580 20 L 565 20" />
+    <path d="M 20 302 L 20 317 L 35 317" />
+    <path d="M 580 302 L 580 317 L 565 317" />
+  </g>
+  <text x="35" y="32" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="2">MONO // WI-FI UPS 15000mAh</text>
+  <text x="565" y="32" text-anchor="end" fill="rgba(255,255,255,0.3)" font-family="monospace" font-size="10" letter-spacing="1">0ms AUTO SWITCH</text>
+
+  <!-- Wi-Fi Waves Icon -->
+  <g transform="translate(110, 80)" stroke="#ffffff" fill="none" opacity="0.85">
+    <circle cx="40" cy="90" r="4" fill="#ffffff"/>
+    <path d="M 26 76 A 20 20 0 0 1 54 76" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 14 62 A 38 38 0 0 1 66 62" stroke-width="2.5" stroke-linecap="round"/>
+    <path d="M 2 48 A 56 56 0 0 1 78 48" stroke-width="2.5" stroke-linecap="round"/>
+    <text x="40" y="118" text-anchor="middle" fill="#888888" font-family="'Inter', sans-serif" font-size="11" font-weight="700" letter-spacing="1" stroke="none">ONLINE 24/7</text>
+  </g>
+
+  <!-- Mini-UPS Main Unit -->
+  <g transform="translate(230, 65)">
+    <!-- Shadow -->
+    <rect x="8" y="8" width="260" height="175" rx="12" fill="#000000" opacity="0.6"/>
+    <!-- Shell -->
+    <rect x="0" y="0" width="260" height="175" rx="12" fill="url(#upsBody)" stroke="#3a3a3a" stroke-width="2"/>
+    <rect x="5" y="5" width="250" height="165" rx="8" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1"/>
+
+    <!-- Branding -->
+    <text x="24" y="34" fill="#ffffff" font-family="'Inter', sans-serif" font-weight="800" font-size="15" letter-spacing="2">MONO.DROP</text>
+    <text x="24" y="48" fill="#777777" font-family="monospace" font-size="9" letter-spacing="1">DC SMART BACKUP UPS • 15000mAh</text>
+
+    <!-- Cooling Vents -->
+    <g stroke="#2c2c2c" stroke-width="2">
+      <line x1="24" y1="62" x2="140" y2="62"/>
+      <line x1="24" y1="68" x2="140" y2="68"/>
+      <line x1="24" y1="74" x2="140" y2="74"/>
+    </g>
+
+    <!-- LED Status Cluster -->
+    <rect x="24" y="88" width="212" height="60" rx="6" fill="#0d0d0d" stroke="#2a2a2a" stroke-width="1"/>
+    
+    <!-- LED 1: 12V -->
+    <g transform="translate(42, 102)">
+      <circle cx="8" cy="8" r="4.5" fill="#ffffff" filter="url(#ledGlow)"/>
+      <text x="8" y="30" text-anchor="middle" fill="#cccccc" font-family="monospace" font-size="9" font-weight="700">12V</text>
+    </g>
+
+    <!-- LED 2: 9V -->
+    <g transform="translate(90, 102)">
+      <circle cx="8" cy="8" r="4.5" fill="#ffffff" filter="url(#ledGlow)"/>
+      <text x="8" y="30" text-anchor="middle" fill="#cccccc" font-family="monospace" font-size="9" font-weight="700">9V</text>
+    </g>
+
+    <!-- LED 3: 5V / USB -->
+    <g transform="translate(138, 102)">
+      <circle cx="8" cy="8" r="4.5" fill="#ffffff" filter="url(#ledGlow)"/>
+      <text x="8" y="30" text-anchor="middle" fill="#cccccc" font-family="monospace" font-size="9" font-weight="700">5V</text>
+    </g>
+
+    <!-- LED 4: BATTERY FULL -->
+    <g transform="translate(186, 102)">
+      <circle cx="8" cy="8" r="4.5" fill="#ffffff" filter="url(#ledGlow)"/>
+      <text x="8" y="30" text-anchor="middle" fill="#ffffff" font-family="monospace" font-size="9" font-weight="700">BAT</text>
+    </g>
+
+    <!-- Output Ports on right side -->
+    <rect x="245" y="45" width="25" height="14" rx="3" fill="#181818" stroke="#444" stroke-width="1.5"/>
+    <circle cx="257" cy="52" r="3.5" fill="#050505"/>
+
+    <rect x="245" y="75" width="25" height="14" rx="3" fill="#181818" stroke="#444" stroke-width="1.5"/>
+    <circle cx="257" cy="82" r="3.5" fill="#050505"/>
+
+    <rect x="245" y="105" width="25" height="14" rx="3" fill="#181818" stroke="#444" stroke-width="1.5"/>
+    <circle cx="257" cy="112" r="3.5" fill="#050505"/>
+  </g>
+
+  <!-- Connected DC Output Power Cables -->
+  <g stroke="#ffffff" stroke-width="2.5" fill="none" opacity="0.8">
+    <path d="M 500 117 C 530 117, 545 150, 560 170" stroke-linecap="round"/>
+    <path d="M 500 147 C 525 147, 535 210, 560 230" stroke-linecap="round"/>
+  </g>
+  <!-- Cable Plugs -->
+  <rect x="490" y="112" width="14" height="10" rx="2" fill="#333" stroke="#fff" stroke-width="1"/>
+  <rect x="490" y="142" width="14" height="10" rx="2" fill="#333" stroke="#fff" stroke-width="1"/>
+
+  <!-- Footer Tag -->
+  <rect x="200" y="295" width="200" height="22" rx="11" fill="#1b1b1b" stroke="#333" stroke-width="1"/>
+  <text x="300" y="310" text-anchor="middle" fill="#ffffff" font-family="'Inter', sans-serif" font-size="10" font-weight="600" letter-spacing="1">⚡ БЕЗПЕРЕБІЙНИК ДЛЯ РОУТЕРА</text>
+</svg>

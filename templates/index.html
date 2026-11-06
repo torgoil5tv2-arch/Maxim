@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>MONO.DROP — Кастомний одяг, Часи, Світильники та Акумулятори</title>
+    <meta name="description" content="Ексклюзивний кастомний одяг, модифіковані годинники, атмосферні LED-світильники та потужні акумулятори. Швидке замовлення по Україні.">
+    <meta name="keywords" content="кастомний одяг, кастомні часи, світильники, акумулятори, павербанки, купити Україна, mono drop">
+
+    <!-- OpenGraph / Facebook / Telegram / TikTok -->
+    <meta property="og:type" content="website">
+    <meta property="og:title" content="MONO.DROP — Кастомний одяг, Часи, Світильники та Акумулятори">
+    <meta property="og:description" content="Ексклюзивний кастомний одяг, модифіковані годинники, атмосферні LED-світильники та потужні акумулятори. Швидке замовлення по Україні.">
+    <meta property="og:site_name" content="MONO.DROP">
+    <meta property="og:locale" content="uk_UA">
+
+    <!-- Twitter Card -->
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="MONO.DROP — Кастомний одяг, Часи, Світильники та Акумулятори">
+    <meta name="twitter:description" content="Ексклюзивний кастомний одяг, модифіковані годинники, атмосферні LED-світильники та потужні акумулятори. Швидке замовлення по Україні.">
+
+    <!-- Google Fonts: Inter (400, 600, 800) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/main.css">
+</head>
+<body>
+    <!-- Повноекранний кібер-фон: чорно-білий анімований SVG (Circuit Board & Pulses) -->
+    <div class="cyber-bg-container">
+        <svg class="cyber-svg" viewBox="0 0 1920 1080" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <pattern id="bgGrid" width="60" height="60" patternUnits="userSpaceOnUse">
+                    <path d="M 60 0 L 0 0 0 60" fill="none" stroke="rgba(255, 255, 255, 0.02)" stroke-width="1"/>
+                </pattern>
+                <filter id="nodeGlow" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="3" result="blur"/>
+                    <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                </filter>
+            </defs>
+
+            <!-- Технічна фонова сітка -->
+            <rect width="100%" height="100%" fill="url(#bgGrid)"/>
+
+            <!-- Базові статичні доріжки плати (чорно-біла палітра) -->
+            <g class="circuit-static-tracks">
+                <path d="M 0,220 L 260,220 L 340,300 L 620,300 L 700,380 L 1020,380" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                <path d="M 1920,180 L 1680,180 L 1580,280 L 1320,280 L 1240,360 L 980,360" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+                <path d="M 180,0 L 180,160 L 280,260 L 280,540 L 360,620 L 360,940" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+                <path d="M 1740,0 L 1740,240 L 1620,360 L 1620,680 L 1520,780 L 1520,1080" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="1.5"/>
+                <path d="M 440,1080 L 440,860 L 520,780 L 860,780 L 940,700 L 1260,700 L 1340,780 L 1640,780" fill="none" stroke="rgba(255,255,255,0.06)" stroke-width="1.5"/>
+            </g>
+
+            <!-- Анімовані світлові імпульси, що рухаються по доріжках -->
+            <g class="circuit-pulses">
+                <path class="circuit-pulse pulse-1" d="M 0,220 L 260,220 L 340,300 L 620,300 L 700,380 L 1020,380"/>
+                <path class="circuit-pulse pulse-2" d="M 1920,180 L 1680,180 L 1580,280 L 1320,280 L 1240,360 L 980,360"/>
+                <path class="circuit-pulse pulse-3" d="M 180,0 L 180,160 L 280,260 L 280,540 L 360,620 L 360,940"/>
+                <path class="circuit-pulse pulse-4" d="M 1740,0 L 1740,240 L 1620,360 L 1620,680 L 1520,780 L 1520,1080"/>
+                <path class="circuit-pulse pulse-5" d="M 440,1080 L 440,860 L 520,780 L 860,780 L 940,700 L 1260,700 L 1340,780 L 1640,780"/>
+            </g>
+
+            <!-- Вузлові точки (Nodes) плати -->
+            <g class="circuit-nodes">
+                <circle cx="260" cy="220" r="3.5" class="circuit-node"/>
+                <circle cx="340" cy="300" r="3" class="circuit-node"/>
+                <circle cx="700" cy="380" r="4" class="circuit-node"/>
+                <circle cx="1680" cy="180" r="3.5" class="circuit-node"/>
+                <circle cx="1580" cy="280" r="3" class="circuit-node"/>
+                <circle cx="1240" cy="360" r="4" class="circuit-node"/>
+                <circle cx="280" cy="540" r="3.5" class="circuit-node"/>
+                <circle cx="360" cy="620" r="3" class="circuit-node"/>
+                <circle cx="1620" cy="680" r="3.5" class="circuit-node"/>
+                <circle cx="520" cy="780" r="3" class="circuit-node"/>
+                <circle cx="940" cy="700" r="4" class="circuit-node"/>
+                <circle cx="1340" cy="780" r="3.5" class="circuit-node"/>
+            </g>
+
+            <!-- Декоративні контури мікросхем -->
+            <g class="circuit-chips">
+                <rect x="960" y="340" width="80" height="80" rx="6" class="cyber-chip"/>
+                <rect x="880" y="660" width="90" height="90" rx="6" class="cyber-chip"/>
+                <rect x="240" y="500" width="70" height="70" rx="6" class="cyber-chip"/>
+                <rect x="1580" y="640" width="70" height="70" rx="6" class="cyber-chip"/>
+            </g>
+        </svg>
+    </div>
+
+    <!-- Затемнений фон для сайдбару -->
+    <div id="sidebarOverlay" class="sidebar-overlay sidebar-backdrop"></div>
+
+    <!-- Ліва бічна панель (Sidebar Menu) -->
+    <aside id="leftSidebar" class="sidebar" aria-label="Головне меню сайту">
+        <div class="sidebar-header">
+            <div class="sidebar-brand">
+                <span class="sidebar-logo">MONO.DROP</span>
+            </div>
+            <button type="button" id="closeSidebarBtn" class="sidebar-close-btn" aria-label="Закрити меню">&times;</button>
+        </div>
+
+        <!-- Головна акцентна кнопка: + Додати роботу -->
+        <button type="button" id="openAddProductBtn" class="sidebar-add-btn">
+            <span class="add-icon">＋</span>
+            <span>Додати роботу</span>
+        </button>
+
+        <div class="sidebar-divider"></div>
+
+        <!-- Навігаційні пункти меню -->
+        <nav class="sidebar-nav">
+            <button type="button" class="sidebar-nav-item" data-action="home">
+                <span class="nav-icon">🏠</span>
+                <span class="nav-label">Головна</span>
+            </button>
+            <button type="button" class="sidebar-nav-item" data-action="about">
+                <span class="nav-icon">📦</span>
+                <span class="nav-label">Про товари та кастом</span>
+            </button>
+            <button type="button" class="sidebar-nav-item" data-action="delivery">
+                <span class="nav-icon">🚚</span>
+                <span class="nav-label">Оплата та доставка</span>
+            </button>
+            <button type="button" class="sidebar-nav-item" data-action="socials">
+                <span class="nav-icon">📱</span>
+                <span class="nav-label">Наші соцмережі</span>
+            </button>
+        </nav>
+
+        <div class="sidebar-footer">
+            <p class="sidebar-copy">© 2026 MONO.DROP<br>Handcrafted & Custom Gear</p>
+        </div>
+    </aside>
+
+    <!-- Фіксована кнопка виклику сайдбару у верхньому лівому кутку екрана -->
+    <button type="button" id="sidebarToggle" class="sidebar-toggle-btn menu-btn" aria-label="Відкрити меню">
+        <span class="burger-icon">☰</span>
+    </button>
+
+    <div class="site-wrapper">
+        <!-- Блок 1: Шапка сайту (Логотип строго по центру) -->
+        <header class="site-header">
+            <h1 class="site-logo">MONO.DROP</h1>
+        </header>
+
+        <!-- Блок 2: Декоративна SVG-область з анімованими колами під назвою сайту -->
+        <section class="hero-circles-section" aria-hidden="true">
+            <div class="hero-circles-container">
+                <svg class="hero-circles-svg" viewBox="0 0 1200 130" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+                    <defs>
+                        <!-- Чорно-білі градієнти з прозорістю від 0.8 до 0.1 -->
+                        <radialGradient id="circGradMain" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.8"/>
+                            <stop offset="45%" stop-color="#D0D0D0" stop-opacity="0.35"/>
+                            <stop offset="85%" stop-color="#808080" stop-opacity="0.1"/>
+                            <stop offset="100%" stop-color="#121212" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="circGradSub" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.6"/>
+                            <stop offset="55%" stop-color="#A0A0A0" stop-opacity="0.2"/>
+                            <stop offset="100%" stop-color="#121212" stop-opacity="0"/>
+                        </radialGradient>
+                        <radialGradient id="circGradGhost" cx="50%" cy="50%" r="50%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.4"/>
+                            <stop offset="70%" stop-color="#606060" stop-opacity="0.08"/>
+                            <stop offset="100%" stop-color="#121212" stop-opacity="0"/>
+                        </radialGradient>
+                        <linearGradient id="ringGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                            <stop offset="0%" stop-color="#FFFFFF" stop-opacity="0.65"/>
+                            <stop offset="50%" stop-color="#888888" stop-opacity="0.15"/>
+                            <stop offset="100%" stop-color="#FFFFFF" stop-opacity="0.5"/>
+                        </linearGradient>
+                    </defs>
+
+                    <!-- Тонкі координатні лінії з мітками -->
+                    <line x1="80" y1="65" x2="320" y2="65" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 4"/>
+                    <line x1="420" y1="65" x2="520" y2="65" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <line x1="680" y1="65" x2="780" y2="65" stroke="rgba(255,255,255,0.18)" stroke-width="1"/>
+                    <line x1="880" y1="65" x2="1120" y2="65" stroke="rgba(255,255,255,0.12)" stroke-width="1" stroke-dasharray="3 4"/>
+
+                    <!-- Ліва периферійна група кіл -->
+                    <circle cx="160" cy="65" r="8" fill="url(#circGradSub)" class="pulse-glow"/>
+                    <circle cx="240" cy="50" r="18" fill="url(#circGradGhost)" class="pulse-glow"/>
+                    <circle cx="340" cy="65" r="4" fill="#FFFFFF" opacity="0.4" class="pulse-glow"/>
+
+                    <!-- Ліва орбітальна група -->
+                    <g class="spin-slow" style="transform-origin: 370px 65px;">
+                        <circle cx="370" cy="65" r="38" stroke="url(#ringGrad)" stroke-width="1" stroke-dasharray="4 6"/>
+                        <circle cx="408" cy="65" r="3.5" fill="#FFFFFF" opacity="0.75"/>
+                    </g>
+                    <circle cx="370" cy="65" r="22" fill="url(#circGradSub)" class="pulse-glow" style="transform-origin: 370px 65px;"/>
+
+                    <!-- Центральна група: зовнішнє пунктирне кільце (.spin-slow) -->
+                    <g class="spin-slow" style="transform-origin: 600px 65px;">
+                        <circle cx="600" cy="65" r="54" stroke="url(#ringGrad)" stroke-width="1.2" stroke-dasharray="8 8"/>
+                        <circle cx="654" cy="65" r="5.5" fill="#FFFFFF" opacity="0.85"/>
+                    </g>
+
+                    <!-- Центральна група: внутрішнє кільце (.spin-reverse) -->
+                    <g class="spin-reverse" style="transform-origin: 600px 65px;">
+                        <circle cx="600" cy="65" r="38" stroke="rgba(255,255,255,0.25)" stroke-width="1"/>
+                        <circle cx="562" cy="65" r="4" fill="#FFFFFF" opacity="0.6"/>
+                    </g>
+
+                    <!-- Центральне ядро та світлова пульсація (.pulse-glow) -->
+                    <circle cx="600" cy="65" r="28" fill="url(#circGradMain)" class="pulse-glow" style="transform-origin: 600px 65px;"/>
+                    <circle cx="600" cy="65" r="10" fill="#FFFFFF" opacity="0.5" class="pulse-glow" style="transform-origin: 600px 65px;"/>
+
+                    <!-- Права орбітальна група: кільце (.spin-reverse) -->
+                    <g class="spin-reverse" style="transform-origin: 830px 65px;">
+                        <circle cx="830" cy="65" r="38" stroke="url(#ringGrad)" stroke-width="1" stroke-dasharray="4 6"/>
+                        <circle cx="792" cy="65" r="3.5" fill="#FFFFFF" opacity="0.75"/>
+                    </g>
+                    <circle cx="830" cy="65" r="22" fill="url(#circGradSub)" class="pulse-glow" style="transform-origin: 830px 65px;"/>
+
+                    <!-- Права периферійна група кіл -->
+                    <circle cx="860" cy="65" r="4" fill="#FFFFFF" opacity="0.4" class="pulse-glow"/>
+                    <circle cx="960" cy="80" r="18" fill="url(#circGradGhost)" class="pulse-glow"/>
+                    <circle cx="1040" cy="65" r="8" fill="url(#circGradSub)" class="pulse-glow"/>
+                </svg>
+            </div>
+        </section>
+
+        <!-- Блок 3: Рядок пошуку (капсула строго по центру) -->
+        <section class="search-section">
+            <div class="search-box">
+                <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="11" cy="11" r="8"></circle>
+                    <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                </svg>
+                <input type="text" id="searchInput" placeholder="Пошук товарів (наприклад: павербанк, худі, світильник, часи)..." autocomplete="off">
+                <span class="search-shortcut">Ctrl + K</span>
+            </div>
+        </section>
+
+        <!-- Блок 4: Блок категорій товарів -->
+        <nav class="categories-nav" aria-label="Категорії товарів">
+            <button class="category-card active" data-category="all">
+                <span class="cat-icon">⚡</span>
+                <span class="cat-name">Всі товари</span>
+            </button>
+            <button class="category-card" data-category="accumulators">
+                <span class="cat-icon">🔋</span>
+                <span class="cat-name">Акумулятори</span>
+            </button>
+            <button class="category-card" data-category="lamps">
+                <span class="cat-icon">💡</span>
+                <span class="cat-name">Світильники</span>
+            </button>
+            <button class="category-card" data-category="clothing">
+                <span class="cat-icon">👕</span>
+                <span class="cat-name">Кастомний одяг</span>
+            </button>
+            <button class="category-card" data-category="watches">
+                <span class="cat-icon">⌚</span>
+                <span class="cat-name">Кастомні часи</span>
+            </button>
+        </nav>
+
+        <!-- Блок 5: Рекомендовані товари (YouTube Grid) -->
+        <section class="feed-section">
+            <div class="section-header">
+                <div class="section-heading-group">
+                    <h2 class="section-title">Рекомендовані</h2>
+                    <span class="section-subtitle">Авторський кастом та топове залізо</span>
+                </div>
+            </div>
+            <div id="productsGrid" class="youtube-grid">
+                {% for item in products %}
+                <article class="yt-card" 
+                         data-id="{{ item.id }}"
+                         data-title="{{ item.title }}"
+                         data-price="{{ item.price }}"
+                         data-thumbnail="{{ item.thumbnail }}"
+                         data-description="{{ item.description }}"
+                         data-category="{{ item.category_id }}" 
+                         data-category-name="{{ item.category_name }}">
+                    <div class="yt-thumbnail-wrapper">
+                        <img src="{{ item.thumbnail }}" alt="{{ item.title }}" loading="lazy" decoding="async" width="480" height="270" onerror="this.src='https://placehold.co/480x270/161616/ffffff?text=MONO.DROP'">
+                        <span class="yt-price-badge">{{ item.price }} ₴</span>
+                    </div>
+                    <div class="yt-info">
+                        <div class="yt-avatar">{{ item.icon }}</div>
+                        <div class="yt-meta">
+                            <h3 class="yt-title">{{ item.title }}</h3>
+                            <p class="yt-subtitle">{{ item.category_name }} • {{ item.badge }}</p>
+                        </div>
+                    </div>
+                </article>
+                {% endfor %}
+            </div>
+
+            <!-- Блок порожнього результату пошуку/фільтрації -->
+            <div id="noResults" class="no-results" style="display: none;">
+                <p class="no-results-text">За вашим запитом нічого не знайдено 🕵️‍♂️</p>
+                <button type="button" id="resetFiltersBtn" class="reset-filters-btn">Скинути фільтри</button>
+            </div>
+        </section>
+    </div>
+
+    <!-- Дані товарів для JS (повний масив з характеристиками) -->
+    <script>window.PRODUCTS_DATA = {{ products | tojson | safe }};</script>
+
+    <!-- Модальне вікно товару в стилі OLX (#productDetailsModal) -->
+    <div id="productDetailsModal" class="modal-backdrop modal-overlay" aria-hidden="true">
+        <div class="modal-dialog olx-dialog">
+            <div class="modal-header">
+                <span class="modal-header-badge">MONO.DROP • ДЕТАЛІ ТОВАРУ</span>
+                <button type="button" class="modal-close-btn close-btn" id="closeProductDetailsBtn" aria-label="Закрити">&times;</button>
+            </div>
+
+            <div class="olx-layout">
+                <!-- Ліва колонка: фото, характеристики, опис -->
+                <div class="olx-left">
+                    <div class="olx-image-box">
+                        <span id="olxCategoryBadge" class="olx-category-badge"></span>
+                        <img id="olxProductImg" src="" alt="Товар" loading="lazy" decoding="async" width="750" height="422" onerror="this.src='https://placehold.co/750x422/161616/ffffff?text=MONO.DROP'">
+                    </div>
+
+                    <div id="olxSpecsSection" class="olx-specs-section">
+                        <h4 class="olx-block-title">ХАРАКТЕРИСТИКИ</h4>
+                        <div id="olxSpecsTags" class="olx-specs-tags"></div>
+                    </div>
+
+                    <div class="olx-description-box">
+                        <h4 class="olx-block-title">ОПИС ТОВАРУ</h4>
+                        <p id="olxDescription" class="olx-desc-text"></p>
+                        <div class="olx-desc-footer">
+                            <span id="olxProductIdLabel" class="olx-id-label"></span>
+                            <span id="olxViewsLabel" class="olx-views-label"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Права колонка: картка покупки -->
+                <div class="olx-right">
+                    <div class="olx-buy-panel">
+                        <div class="olx-status-line">
+                            <span id="olxCondition" class="olx-condition"></span>
+                        </div>
+                        <h2 id="olxTitle" class="olx-product-title"></h2>
+                        <div id="olxPrice" class="olx-big-price"></div>
+
+                        <div class="olx-delivery-info">
+                            <span class="olx-delivery-icon">🚚</span>
+                            <span>Відправка Новою Поштою по всій Україні</span>
+                        </div>
+
+                        <button type="button" id="showCheckoutFormBtn" class="olx-buy-btn">КУПИТИ З ДОСТАВКОЮ</button>
+
+                        <!-- Вбудована форма замовлення (прихована за замовчуванням) -->
+                        <div id="olxCheckoutForm" class="olx-checkout-form" style="display:none;">
+                            <form id="olxOrderForm" class="order-form">
+                                <input type="hidden" id="olxHiddenId">
+                                <input type="hidden" id="olxHiddenTitle">
+                                <input type="hidden" id="olxHiddenPrice">
+                                <div class="form-group">
+                                    <label for="olxClientName">Ім'я та Прізвище <span class="req">*</span></label>
+                                    <input type="text" id="olxClientName" placeholder="Олександр Петренко" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="olxClientPhone">Номер телефону <span class="req">*</span></label>
+                                    <input type="tel" id="olxClientPhone" placeholder="+380..." required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="olxClientDelivery">Місто та відділення НП <span class="req">*</span></label>
+                                    <input type="text" id="olxClientDelivery" placeholder="м. Київ, відділення №12" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="olxClientComment">Коментар / Telegram-нік</label>
+                                    <input type="text" id="olxClientComment" placeholder="@username або побажання">
+                                </div>
+                                <button type="submit" id="olxSubmitOrder" class="order-submit-btn">ПІДТВЕРДИТИ ЗАМОВЛЕННЯ</button>
+                            </form>
+                        </div>
+
+                        <div id="olxOrderSuccess" class="olx-order-success" style="display:none;">
+                            <p>✅ Замовлення прийнято! Ми скоро зв'яжемось з вами.</p>
+                        </div>
+
+                        <a href="https://t.me/" target="_blank" rel="noopener noreferrer" class="olx-tg-btn">
+                            <span>✈️</span> Написати продавцю в Telegram
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Модальне вікно додавання товару (#addProductModal) -->
+    <div id="addProductModal" class="modal-backdrop modal-overlay" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-wide">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <h2 class="modal-title">＋ Додати нову роботу</h2>
+                    <p class="modal-subtitle">Публікація кастомного товару в каталог магазину</p>
+                </div>
+                <button type="button" class="modal-close-btn close-btn" id="closeAddProductModalBtn" aria-label="Закрити">&times;</button>
+            </div>
+
+            <form id="addProductForm" class="order-form">
+                <div class="form-group">
+                    <label for="adminPin">Секретний PIN адміністратора <span class="req">*</span></label>
+                    <input type="password" id="adminPin" name="pin" placeholder="Секретний PIN адміністратора" required autocomplete="current-password">
+                </div>
+
+                <div class="form-group">
+                    <label for="newProductTitle">Назва товару / роботи <span class="req">*</span></label>
+                    <input type="text" id="newProductTitle" name="title" placeholder="напр., Кастомний годинник Seiko Mod Nautilus" required>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group flex-1">
+                        <label for="newProductCategory">Категорія <span class="req">*</span></label>
+                        <select id="newProductCategory" name="category_id" class="form-select" required>
+                            <option value="accumulators">🔋 Акумулятори</option>
+                            <option value="lamps">💡 Світильники</option>
+                            <option value="clothing">👕 Кастомний одяг</option>
+                            <option value="watches">⌚ Кастомні часи</option>
+                        </select>
+                    </div>
+                    <div class="form-group flex-1">
+                        <label for="newProductPrice">Ціна (грн) <span class="req">*</span></label>
+                        <input type="number" id="newProductPrice" name="price" placeholder="3200" min="1" required>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="newProductBadge">Статус / Бейдж</label>
+                    <input type="text" id="newProductBadge" name="badge" value="Ручна робота • В наявності">
+                </div>
+
+                <div class="form-group">
+                    <label for="newProductThumbnail">Посилання на фото (URL)</label>
+                    <input type="url" id="newProductThumbnail" name="thumbnail" placeholder="https://... (залиште пустим для стандартної заглушки)">
+                </div>
+
+                <div class="form-group">
+                    <label for="newProductDescription">Детальний опис про товар <span class="req">*</span></label>
+                    <textarea id="newProductDescription" name="description" rows="3" placeholder="Характеристики, матеріали, особливості ручної збірки..." required></textarea>
+                </div>
+
+                <div class="form-group">
+                    <label for="productSpecsInput">Характеристики (необов'язково)</label>
+                    <textarea id="productSpecsInput" name="specs_raw" rows="4" placeholder="Характеристики (кожна з нового рядка через двокрапку, наприклад:&#10;Ємність: 20000 mAh&#10;Потужність: 65W&#10;Стан: Новий)"></textarea>
+                </div>
+
+                <button type="submit" id="submitAddProductBtn" class="order-submit-btn">
+                    ОПУБЛІКУВАТИ ТОВАР
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Інформаційне модальне вікно (#infoModal) -->
+    <div id="infoModal" class="modal-backdrop modal-overlay" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-header">
+                <div class="modal-heading">
+                    <h2 id="infoModalTitle" class="modal-title"></h2>
+                </div>
+                <button type="button" class="modal-close-btn close-btn" id="closeInfoModalBtn" aria-label="Закрити">&times;</button>
+            </div>
+            <div id="infoModalBody" class="info-modal-content">
+                <!-- Контент підставляється динамічно через JS -->
+            </div>
+        </div>
+    </div>
+
+    <script src="/static/js/main.js" defer></script>
+</body>
+</html>

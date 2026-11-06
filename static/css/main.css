@@ -1,0 +1,1590 @@
+/* ==========================================================================
+   MONO.DROP — Чистий чорно-білий мінімалізм (Monochrome Tech & YouTube Grid)
+   Глибокий матовий чорний фон (#121212), білий текст (#FFFFFF), строгі рамки (#333333).
+   ========================================================================== */
+
+/* 1. Скидання та дизайн-токени */
+:root {
+    --bg-page: #121212;
+    --bg-element: #1A1A1A;
+    --bg-element-elevated: #222222;
+    --bg-input: #111111;
+    --border-color: #333333;
+    --border-subtle: #242424;
+    --border-hover: #666666;
+    --border-active: #FFFFFF;
+    --text-primary: #FFFFFF;
+    --text-secondary: #8E8E8E;
+    --text-muted: #555555;
+    --text-inverse: #000000;
+    --white-glow: 0 0 20px rgba(255, 255, 255, 0.22);
+    --white-glow-strong: 0 0 30px rgba(255, 255, 255, 0.45);
+    --font-stack: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --transition-smooth: all 0.25s cubic-bezier(0.2, 0.8, 0.2, 1);
+    --transition-fast: all 0.15s ease;
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+}
+
+body {
+    background-color: var(--bg-page);
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    line-height: 1.5;
+    min-height: 100vh;
+    overflow-x: hidden;
+    position: relative;
+    width: 100%;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+/* ==========================================================================
+   2. Повноекранний кібер-фон: Чорно-білий анімований SVG (Circuit Board)
+   ========================================================================== */
+.cyber-bg-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    user-select: none;
+    overflow: hidden;
+    background: radial-gradient(circle at 50% 25%, #181818 0%, #0d0d0d 65%, #050505 100%);
+}
+
+.cyber-svg {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 0 !important;
+    pointer-events: none !important;
+    display: block;
+    user-select: none;
+}
+
+/* Анімовані імпульси по доріжках */
+.circuit-pulse {
+    fill: none;
+    stroke: #FFFFFF;
+    stroke-width: 2;
+    stroke-linecap: round;
+    stroke-dasharray: 80 1200;
+    stroke-dashoffset: 1280;
+    filter: drop-shadow(0 0 5px rgba(255, 255, 255, 0.7));
+}
+
+.circuit-pulse.pulse-1 { animation: pulseFlow1 8s linear infinite; }
+.circuit-pulse.pulse-2 { animation: pulseFlow2 10s linear infinite 1.5s; }
+.circuit-pulse.pulse-3 { animation: pulseFlow1 9s linear infinite 0.8s; }
+.circuit-pulse.pulse-4 { animation: pulseFlow2 11s linear infinite 2.2s; }
+.circuit-pulse.pulse-5 { animation: pulseFlow1 8.5s linear infinite 1s; }
+
+@keyframes pulseFlow1 {
+    0%   { stroke-dashoffset: 1280; }
+    100% { stroke-dashoffset: -1280; }
+}
+
+@keyframes pulseFlow2 {
+    0%   { stroke-dashoffset: -1280; }
+    100% { stroke-dashoffset: 1280; }
+}
+
+/* Вузлові точки (Nodes) плати */
+.circuit-node {
+    fill: rgba(255, 255, 255, 0.12);
+    animation: nodeBlink 3.5s ease-in-out infinite alternate;
+}
+
+@keyframes nodeBlink {
+    0%   { fill: rgba(255, 255, 255, 0.06); filter: drop-shadow(0 0 0px transparent); }
+    100% { fill: rgba(255, 255, 255, 0.28); filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.4)); }
+}
+
+/* Контури мікросхем */
+.cyber-chip {
+    fill: none;
+    stroke: rgba(255, 255, 255, 0.06);
+    stroke-width: 1;
+    animation: nodeBlink 4.5s ease-in-out infinite alternate-reverse;
+}
+
+/* ==========================================================================
+   3. Ієрархія та порядок шарів (Z-index Architecture)
+   ========================================================================== */
+.site-wrapper,
+header,
+.site-header,
+.hero-circles-section,
+.search-section,
+.categories-nav,
+.feed-section,
+.youtube-grid,
+#productsGrid {
+    position: relative;
+    z-index: 5 !important;
+}
+
+.site-wrapper {
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+/* ==========================================================================
+   4. Блок 1: Шапка сайту (Header — кнопка ☰ зліва, Логотип строго по центру)
+   ========================================================================== */
+.site-header {
+    width: 100%;
+    max-width: 1280px;
+    padding: 24px 24px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+#sidebarToggle,
+.sidebar-toggle-btn,
+.menu-btn {
+    position: fixed !important;
+    top: 20px !important;
+    left: 20px !important;
+    z-index: 1000 !important;
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    background: #1A1A1A;
+    border: 1px solid #333333;
+    color: #FFFFFF;
+    border-radius: 12px;
+    cursor: pointer;
+    outline: none;
+    transition: all 0.25s ease;
+}
+
+#sidebarToggle .burger-icon,
+.sidebar-toggle-btn .burger-icon,
+.menu-btn .burger-icon {
+    font-size: 1.4rem;
+    line-height: 1;
+    transition: transform 0.2s ease;
+}
+
+#sidebarToggle:hover,
+.sidebar-toggle-btn:hover,
+.menu-btn:hover {
+    background: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(255, 255, 255, 0.4);
+    transform: scale(1.05);
+}
+
+#sidebarToggle:hover .burger-icon,
+.sidebar-toggle-btn:hover .burger-icon,
+.menu-btn:hover .burger-icon {
+    transform: scale(1.1);
+}
+
+.site-logo {
+    font-size: 2.6rem;
+    font-weight: 900;
+    letter-spacing: 4px;
+    text-transform: uppercase;
+    color: var(--text-primary);
+    margin: 0;
+    line-height: 1;
+    text-align: center;
+    user-select: none;
+    text-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+}
+
+/* ==========================================================================
+   5. Блок 2: Декоративна SVG-область з анімованими колами
+   ========================================================================== */
+.hero-circles-section {
+    width: 100%;
+    max-width: 1200px;
+    padding: 0 20px;
+    margin: 6px auto 14px;
+    display: flex;
+    justify-content: center;
+}
+
+.hero-circles-container {
+    width: 100%;
+    height: 130px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 18px;
+    background: rgba(255, 255, 255, 0.015);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.hero-circles-svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+}
+
+/* Обертання та пульсація кілець у шапці */
+.spin-slow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: spin 20s linear infinite;
+}
+
+.spin-reverse {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: spinReverse 15s linear infinite;
+}
+
+.pulse-glow {
+    transform-box: fill-box;
+    transform-origin: center;
+    animation: pulseNode 3s ease-in-out infinite alternate;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); transform-origin: center; }
+  100% { transform: rotate(360deg); transform-origin: center; }
+}
+
+@keyframes spinReverse {
+  0% { transform: rotate(360deg); transform-origin: center; }
+  100% { transform: rotate(0deg); transform-origin: center; }
+}
+
+@keyframes pulseNode {
+  0% { opacity: 0.3; transform: scale(0.95); }
+  100% { opacity: 1; transform: scale(1.05); }
+}
+
+/* ==========================================================================
+   6. Блок 3: Рядок пошуку (капсула по центру) + кнопка «+ Додати роботу»
+   ========================================================================== */
+.search-section {
+    width: 100%;
+    max-width: 760px;
+    margin: 0 auto 24px;
+    padding: 0 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.search-box {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    background: var(--bg-element);
+    border: 1px solid var(--border-color);
+    border-radius: 9999px;
+    padding: 13px 22px;
+    gap: 12px;
+    transition: var(--transition-smooth);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
+}
+
+.search-box:focus-within {
+    border-color: #FFFFFF;
+    background: #202020;
+    box-shadow: 0 0 22px rgba(255, 255, 255, 0.28), 0 8px 25px rgba(0, 0, 0, 0.5);
+    transform: translateY(-1px);
+}
+
+.search-icon {
+    width: 19px;
+    height: 19px;
+    color: #AAAAAA;
+    flex-shrink: 0;
+}
+
+#searchInput {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    font-size: 0.98rem;
+    font-weight: 500;
+}
+
+#searchInput::placeholder {
+    color: #666666;
+}
+
+.search-shortcut {
+    background: #262626;
+    border: 1px solid #3A3A3A;
+    border-radius: 6px;
+    padding: 3px 8px;
+    font-size: 0.74rem;
+    color: #AAAAAA;
+    font-weight: 600;
+    white-space: nowrap;
+    user-select: none;
+}
+
+
+/* ==========================================================================
+   7. Блок 4: Блок категорій товарів
+   ========================================================================== */
+.categories-nav {
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto 34px;
+    padding: 4px 20px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+}
+
+.categories-nav::-webkit-scrollbar {
+    display: none;
+}
+
+.category-card {
+    background: var(--bg-element);
+    border: 1px solid var(--border-color);
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    font-weight: 600;
+    font-family: var(--font-stack);
+    font-size: 0.92rem;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    outline: none;
+    user-select: none;
+    white-space: nowrap;
+    flex-shrink: 0;
+    transition: var(--transition-smooth);
+}
+
+.category-card .cat-icon {
+    font-size: 1.15rem;
+    transition: transform 0.2s ease;
+}
+
+.category-card:hover,
+.category-card.active {
+    transform: translateY(-2px);
+    background-color: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
+    box-shadow: 0 8px 25px rgba(255, 255, 255, 0.2);
+}
+
+.category-card:hover .cat-icon,
+.category-card.active .cat-icon {
+    transform: scale(1.15);
+}
+
+/* ==========================================================================
+   8. Блок 5: Рекомендовані товари (YouTube Grid)
+   ========================================================================== */
+.feed-section {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto 60px;
+    padding: 0 20px;
+}
+
+.section-header {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin-bottom: 22px;
+    padding: 0 4px;
+}
+
+.section-heading-group {
+    display: flex;
+    align-items: baseline;
+    gap: 12px;
+}
+
+.section-title {
+    font-size: 1.6rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    letter-spacing: -0.3px;
+}
+
+.section-subtitle {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.youtube-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(285px, 1fr));
+    gap: 24px;
+    width: 100%;
+}
+
+.yt-card {
+    background: var(--bg-element);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+    display: flex;
+    flex-direction: column;
+}
+
+.yt-card:hover {
+    transform: translateY(-5px);
+    border-color: var(--border-hover);
+    box-shadow: 0 10px 30px rgba(255, 255, 255, 0.08);
+}
+
+.yt-thumbnail-wrapper {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    overflow: hidden;
+    background: #0E0E0E;
+}
+
+.yt-thumbnail-wrapper img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.4s ease;
+}
+
+.yt-card:hover .yt-thumbnail-wrapper img {
+    transform: scale(1.05);
+}
+
+.yt-price-badge {
+    position: absolute;
+    bottom: 10px;
+    right: 10px;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(4px);
+    color: #FFFFFF;
+    font-weight: 800;
+    font-size: 0.92rem;
+    padding: 5px 12px;
+    border-radius: 6px;
+    border: 1px solid #444444;
+    z-index: 2;
+}
+
+.yt-info {
+    display: flex;
+    gap: 14px;
+    padding: 18px;
+    align-items: flex-start;
+    flex: 1;
+}
+
+.yt-avatar {
+    width: 42px;
+    height: 42px;
+    border-radius: 50%;
+    background: #222222;
+    border: 1px solid #333333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.3rem;
+    flex-shrink: 0;
+}
+
+.yt-meta {
+    flex: 1;
+    min-width: 0;
+}
+
+.yt-title {
+    font-size: 0.98rem;
+    font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1.4;
+    margin-bottom: 6px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.yt-subtitle {
+    font-size: 0.82rem;
+    color: var(--text-secondary);
+    font-weight: 500;
+    display: -webkit-box;
+    -webkit-line-clamp: 1;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+}
+
+.yt-card.is-hidden {
+    display: none !important;
+}
+
+.yt-card.fade-in {
+    animation: cardFadeIn 0.35s ease forwards;
+}
+
+@keyframes cardFadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.no-results {
+    background: var(--bg-element);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 44px 20px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    margin: 30px 0;
+}
+
+.no-results-text {
+    font-size: 1.15rem;
+    color: var(--text-secondary);
+    font-weight: 600;
+}
+
+.reset-filters-btn {
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #FFFFFF;
+    padding: 12px 26px;
+    border-radius: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: var(--transition-smooth);
+}
+
+.reset-filters-btn:hover {
+    background: #000000;
+    color: #FFFFFF;
+    box-shadow: var(--white-glow);
+}
+
+/* ==========================================================================
+   9. Модальні вікна (OLX-вікно, Додати роботу, Інфо)
+   ========================================================================== */
+.modal-backdrop,
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.82);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1200 !important;
+    padding: 20px;
+    overflow-y: auto;
+}
+
+.modal-backdrop.open,
+.modal-backdrop.active,
+.modal-backdrop.is-open,
+.modal-overlay.open,
+.modal-overlay.active,
+.modal-overlay.is-open {
+    display: flex !important;
+}
+
+.modal-dialog,
+.olx-dialog {
+    background: #141414;
+    border: 1px solid #2e2e2e;
+    border-radius: 20px;
+    box-shadow: 0 30px 70px rgba(0, 0, 0, 0.9), 0 0 20px rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+    max-height: 92vh;
+    overflow-y: auto;
+    position: relative;
+    padding: 26px;
+    width: 95%;
+    max-width: 920px;
+    box-sizing: border-box;
+}
+
+.modal-dialog-wide {
+    max-width: 640px;
+}
+
+.modal-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid #282828;
+    padding-bottom: 14px;
+    margin-bottom: 22px;
+}
+
+.modal-header-badge {
+    font-size: 0.75rem;
+    font-weight: 800;
+    color: #AAAAAA;
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+}
+
+.modal-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.modal-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: #FFFFFF;
+}
+
+.modal-subtitle {
+    font-size: 0.85rem;
+    color: var(--text-secondary);
+}
+
+.modal-close-btn,
+.close-btn {
+    background: #1E1E1E;
+    border: 1px solid #333333;
+    color: var(--text-secondary);
+    width: 36px;
+    height: 36px;
+    border-radius: 10px;
+    font-size: 1.4rem;
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.modal-close-btn:hover,
+.close-btn:hover {
+    color: #000000;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    transform: rotate(90deg);
+}
+
+/* OLX Layout */
+.olx-layout {
+    display: flex;
+    gap: 28px;
+    align-items: flex-start;
+}
+
+.olx-left {
+    flex: 1.4;
+    min-width: 0;
+}
+
+.olx-right {
+    flex: 1;
+    min-width: 0;
+}
+
+.olx-image-box {
+    position: relative;
+    aspect-ratio: 16 / 9;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #0E0E0E;
+    border: 1px solid #282828;
+    margin-bottom: 22px;
+}
+
+.olx-image-box img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform 0.3s ease;
+}
+
+.olx-image-box:hover img {
+    transform: scale(1.02);
+}
+
+.olx-category-badge {
+    position: absolute;
+    top: 12px;
+    left: 12px;
+    background: rgba(0, 0, 0, 0.88);
+    backdrop-filter: blur(6px);
+    color: #FFFFFF;
+    border: 1px solid #444444;
+    border-radius: 6px;
+    padding: 5px 12px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    z-index: 2;
+}
+
+.olx-specs-section {
+    margin-bottom: 22px;
+}
+
+.olx-block-title {
+    font-size: 0.8rem;
+    font-weight: 800;
+    color: #888888;
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+}
+
+.olx-specs-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+.spec-pill {
+    background: #1C1C1C;
+    border: 1px solid #333333;
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 0.85rem;
+    color: var(--text-primary);
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    line-height: 1.3;
+}
+
+.spec-pill .spec-key {
+    color: var(--text-secondary);
+    font-weight: 500;
+}
+
+.spec-pill .spec-val {
+    color: #FFFFFF;
+    font-weight: 700;
+}
+
+.olx-description-box {
+    background: #181818;
+    border: 1px solid #282828;
+    border-radius: 14px;
+    padding: 20px;
+    margin-bottom: 16px;
+}
+
+.olx-desc-text {
+    color: #CCCCCC;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    white-space: pre-line;
+    margin-bottom: 16px;
+}
+
+.olx-desc-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    color: var(--text-muted);
+    font-size: 0.8rem;
+    border-top: 1px solid #242424;
+    padding-top: 12px;
+}
+
+.olx-buy-panel {
+    background: #181818;
+    border: 1px solid #2A2A2A;
+    border-radius: 18px;
+    padding: 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    position: sticky;
+    top: 10px;
+}
+
+.olx-status-line {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 0.82rem;
+}
+
+.olx-condition {
+    color: #FFFFFF;
+    font-weight: 700;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.olx-condition::before {
+    content: "●";
+    font-size: 0.8rem;
+    color: #4ade80;
+}
+
+.olx-product-title {
+    font-size: 1.35rem;
+    font-weight: 800;
+    color: var(--text-primary);
+    line-height: 1.3;
+}
+
+.olx-big-price {
+    font-size: 2.1rem;
+    font-weight: 900;
+    color: #FFFFFF;
+    letter-spacing: -0.5px;
+}
+
+.olx-delivery-info {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.88rem;
+    color: var(--text-secondary);
+    background: #1F1F1F;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #2E2E2E;
+}
+
+.olx-delivery-icon {
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.olx-buy-btn {
+    background: #FFFFFF;
+    color: #000000;
+    border: 2px solid #FFFFFF;
+    border-radius: 12px;
+    padding: 15px 20px;
+    font-size: 1rem;
+    font-weight: 800;
+    letter-spacing: 0.5px;
+    cursor: pointer;
+    font-family: var(--font-stack);
+    outline: none;
+    transition: var(--transition-smooth);
+    width: 100%;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+}
+
+.olx-buy-btn:hover {
+    background: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: var(--white-glow);
+    transform: translateY(-2px);
+}
+
+.olx-tg-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: transparent;
+    color: var(--text-primary);
+    border: 1px solid #3E3E3E;
+    border-radius: 12px;
+    padding: 12px 16px;
+    font-size: 0.92rem;
+    font-weight: 600;
+    text-decoration: none;
+    font-family: var(--font-stack);
+    transition: var(--transition-fast);
+    text-align: center;
+    width: 100%;
+}
+
+.olx-tg-btn:hover {
+    background: #222222;
+    border-color: #FFFFFF;
+    transform: translateY(-1px);
+}
+
+.olx-checkout-form {
+    background: #111111;
+    border: 1px solid #333333;
+    border-radius: 14px;
+    padding: 16px;
+    animation: cardFadeIn 0.3s ease;
+}
+
+.olx-order-success {
+    background: rgba(34, 197, 94, 0.15);
+    border: 1px solid rgba(34, 197, 94, 0.45);
+    border-radius: 12px;
+    padding: 16px;
+    text-align: center;
+    color: #4ade80;
+    font-weight: 700;
+    font-size: 0.95rem;
+    animation: cardFadeIn 0.3s ease;
+}
+
+/* Форми в модалках */
+.order-form {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+}
+
+.form-group label {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--text-secondary);
+}
+
+.form-group label .req {
+    color: #EF4444;
+}
+
+.form-group input,
+.form-select,
+textarea,
+.form-group textarea {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--bg-input);
+    border: 1px solid var(--border-color);
+    border-radius: 10px;
+    padding: 12px 14px;
+    font-size: 0.95rem;
+    color: var(--text-primary);
+    font-family: var(--font-stack);
+    outline: none;
+    transition: var(--transition-fast);
+}
+
+.form-group input:focus,
+.form-select:focus,
+textarea:focus {
+    border-color: #FFFFFF;
+    box-shadow: 0 0 12px rgba(255, 255, 255, 0.2);
+}
+
+.form-row {
+    display: flex;
+    gap: 14px;
+}
+
+.flex-1 {
+    flex: 1;
+}
+
+textarea {
+    resize: vertical;
+    min-height: 80px;
+    line-height: 1.4;
+}
+
+.order-submit-btn {
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #FFFFFF;
+    border-radius: 12px;
+    padding: 14px;
+    font-weight: 800;
+    font-size: 0.95rem;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+    transition: var(--transition-smooth);
+    font-family: var(--font-stack);
+}
+
+.order-submit-btn:hover {
+    background: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: var(--white-glow);
+    transform: translateY(-2px);
+}
+
+/* Інформаційна модалка */
+.info-modal-content {
+    color: #CCCCCC;
+    font-size: 0.95rem;
+    line-height: 1.6;
+}
+
+.info-modal-content p {
+    margin-bottom: 12px;
+}
+
+.info-modal-content h4 {
+    color: #FFFFFF;
+    font-size: 1.05rem;
+    font-weight: 700;
+    margin: 16px 0 6px;
+}
+
+.info-modal-content ul {
+    margin-left: 20px;
+    margin-bottom: 14px;
+}
+
+.info-modal-content li {
+    margin-bottom: 6px;
+}
+
+.info-social-links {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 16px;
+}
+
+.social-link-btn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    background: #1E1E1E;
+    border: 1px solid #333333;
+    border-radius: 12px;
+    padding: 12px 16px;
+    color: var(--text-primary);
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: var(--transition-smooth);
+}
+
+.social-link-btn:hover {
+    background: #FFFFFF;
+    color: #000000;
+    border-color: #FFFFFF;
+    transform: translateX(4px);
+}
+
+/* ==========================================================================
+   10. Сайдбар меню (Left Sidebar & Overlay)
+   ========================================================================== */
+.sidebar-overlay,
+.sidebar-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(6px);
+    -webkit-backdrop-filter: blur(6px);
+    z-index: 1040 !important;
+    display: none;
+}
+
+.sidebar-overlay.open,
+.sidebar-overlay.active,
+.sidebar-backdrop.open,
+.sidebar-backdrop.active {
+    display: block !important;
+}
+
+.sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 320px;
+    height: 100vh;
+    background: #141414;
+    border-right: 1px solid #2C2C2C;
+    z-index: 1050 !important;
+    transform: translateX(-100%);
+    transition: transform 0.3s cubic-bezier(0.2, 0.8, 0.2, 1);
+    display: flex;
+    flex-direction: column;
+    padding: 24px 20px;
+    box-shadow: 20px 0 50px rgba(0, 0, 0, 0.8);
+}
+
+.sidebar.open,
+.sidebar.active {
+    transform: translateX(0);
+}
+
+.sidebar-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 24px;
+}
+
+.sidebar-logo {
+    font-size: 1.5rem;
+    font-weight: 900;
+    letter-spacing: 2px;
+    color: var(--text-primary);
+}
+
+.sidebar-close-btn {
+    background: transparent;
+    border: none;
+    color: var(--text-secondary);
+    font-size: 1.8rem;
+    line-height: 1;
+    cursor: pointer;
+    transition: var(--transition-fast);
+}
+
+.sidebar-close-btn:hover {
+    color: #FFFFFF;
+    transform: rotate(90deg);
+}
+
+.sidebar-add-btn {
+    background: #FFFFFF;
+    color: #000000;
+    border: 1px solid #FFFFFF;
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 0.95rem;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    cursor: pointer;
+    box-shadow: 0 4px 15px rgba(255, 255, 255, 0.15);
+    transition: var(--transition-smooth);
+    font-family: var(--font-stack);
+}
+
+.sidebar-add-btn:hover {
+    background: #000000;
+    color: #FFFFFF;
+    border-color: #FFFFFF;
+    box-shadow: var(--white-glow);
+    transform: translateY(-2px);
+}
+
+.sidebar-divider {
+    height: 1px;
+    background: #282828;
+    margin: 20px 0;
+}
+
+.sidebar-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    flex: 1;
+}
+
+.sidebar-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    background: transparent;
+    border: 1px solid transparent;
+    border-radius: 12px;
+    padding: 12px 14px;
+    color: var(--text-secondary);
+    font-size: 0.95rem;
+    font-weight: 600;
+    cursor: pointer;
+    text-align: left;
+    transition: var(--transition-smooth);
+    font-family: var(--font-stack);
+}
+
+.sidebar-nav-item:hover {
+    color: #000000;
+    background: #FFFFFF;
+    border-color: #FFFFFF;
+    transform: translateX(4px);
+}
+
+.sidebar-footer {
+    margin-top: auto;
+    padding-top: 20px;
+    border-top: 1px solid #242424;
+}
+
+.sidebar-copy {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    line-height: 1.5;
+}
+
+/* ==========================================================================
+   11. Адаптивність (Mobile-First UX для TikTok-трафіку & Tablets)
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* 1. Запобігання горизонтальному скролу */
+    html, body {
+        overflow-x: hidden !important;
+        max-width: 100vw !important;
+    }
+
+    /* 2. Шапка та логотип (MONO.DROP) */
+    .site-header {
+        padding: 14px 16px 6px;
+        min-height: 52px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+    }
+
+    #sidebarToggle,
+    .sidebar-toggle-btn,
+    .menu-btn {
+        top: 14px !important;
+        left: 14px !important;
+        width: 40px !important;
+        height: 40px !important;
+        z-index: 1000 !important;
+    }
+
+    .site-logo {
+        font-size: clamp(1.6rem, 6vw, 2.2rem) !important;
+        padding-top: 12px;
+        letter-spacing: 2px;
+        line-height: 1.1;
+        margin: 0;
+        text-align: center;
+    }
+
+    /* 3. Анімована SVG-зона з колами */
+    .hero-circles-section {
+        overflow: hidden;
+        padding: 0;
+        width: 100%;
+    }
+
+    .hero-circles-container {
+        height: 85px !important;
+        overflow: hidden;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+    }
+
+    .hero-circles-svg {
+        transform: scale(0.85);
+        transform-origin: center;
+        width: 100%;
+        height: 100%;
+        max-width: 100%;
+    }
+
+    /* 4. Рядок пошуку */
+    .search-section {
+        padding: 0 12px 14px;
+        width: 100%;
+    }
+
+    .search-box {
+        width: calc(100% - 24px) !important;
+        max-width: 100%;
+        margin: 0 auto;
+    }
+
+    .search-shortcut {
+        display: none !important;
+    }
+
+    #searchInput,
+    .search-box input {
+        font-size: 16px !important;
+    }
+
+    /* 5. Горизонтальний свайп категорій (App-style) */
+    .categories-nav {
+        display: flex !important;
+        flex-wrap: nowrap !important;
+        overflow-x: auto !important;
+        justify-content: flex-start !important;
+        padding: 8px 14px !important;
+        gap: 8px !important;
+        -webkit-overflow-scrolling: touch;
+        scrollbar-width: none !important;
+        width: 100%;
+    }
+
+    .categories-nav::-webkit-scrollbar,
+    ::-webkit-scrollbar {
+        display: none !important;
+    }
+
+    .category-card {
+        flex: 0 0 auto !important;
+        white-space: nowrap !important;
+        padding: 8px 14px !important;
+        font-size: 13px !important;
+        min-height: 38px;
+        width: auto !important;
+    }
+
+    /* 6. Сітка товарів (.youtube-grid) для планшетів (481px–768px): 2 колонки */
+    .feed-section {
+        padding: 0 0 40px !important;
+    }
+
+    .section-header {
+        padding: 0 14px 10px;
+    }
+
+    .youtube-grid {
+        display: grid !important;
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+        padding: 0 12px !important;
+    }
+
+    /* 7. Лівий сайдбар (#leftSidebar) */
+    #leftSidebar,
+    .sidebar {
+        width: 82vw !important;
+        max-width: 300px !important;
+    }
+
+    /* 8. Модальне вікно товару (OLX-анкета #productDetailsModal) та форма замовлення */
+    .modal-backdrop,
+    .modal-overlay {
+        align-items: flex-end !important;
+        justify-content: center !important;
+        padding: 0 !important;
+    }
+
+    #productDetailsModal .modal-dialog,
+    #productDetailsModal .olx-dialog,
+    #addProductModal .modal-dialog,
+    .modal-dialog,
+    .olx-dialog,
+    .modal-dialog-wide {
+        width: 100% !important;
+        max-width: 100% !important;
+        height: 92vh !important;
+        max-height: 92vh !important;
+        margin-top: 8vh !important;
+        margin-bottom: 0 !important;
+        margin-left: 0 !important;
+        margin-right: 0 !important;
+        border-radius: 20px 20px 0 0 !important;
+        overflow-y: auto !important;
+        -webkit-overflow-scrolling: touch;
+        padding: 16px !important;
+        box-sizing: border-box !important;
+        position: relative !important;
+    }
+
+    .modal-header {
+        position: relative !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: space-between !important;
+        padding-bottom: 12px !important;
+        margin-bottom: 14px !important;
+        padding-right: 48px !important;
+        min-height: 44px;
+    }
+
+    .modal-header-badge {
+        font-size: 0.72rem;
+        max-width: calc(100% - 10px);
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    /* 1) Кнопка закриття ✕ (фіксована у верхньому правому кутку модалки, розмір 40x40px) */
+    .modal-close-btn,
+    .close-btn,
+    #closeProductDetailsBtn,
+    #closeAddProductModalBtn {
+        position: absolute !important;
+        top: 12px !important;
+        right: 12px !important;
+        width: 40px !important;
+        height: 40px !important;
+        min-width: 40px !important;
+        min-height: 40px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 1.6rem !important;
+        border-radius: 10px !important;
+        z-index: 25 !important;
+    }
+
+    /* Порядок блоків на телефоні:
+       1) Кнопка закриття ✕ (вже у верхньому правому кутку)
+       2) Фото товару (.olx-image-box: order 1)
+       3) Назва + Ціна + Кнопка «Замовити» (.olx-buy-panel: order 2)
+       4) Характеристики та Опис (#olxSpecsSection: order 3, .olx-description-box: order 4) */
+    .olx-layout {
+        display: flex !important;
+        flex-direction: column !important;
+        gap: 14px !important;
+        width: 100% !important;
+    }
+
+    .olx-left {
+        display: contents !important;
+    }
+
+    .olx-right {
+        display: contents !important;
+    }
+
+    .olx-image-box {
+        order: 1 !important;
+        width: 100% !important;
+        aspect-ratio: 16 / 9;
+        margin-bottom: 0 !important;
+    }
+
+    .olx-buy-panel {
+        order: 2 !important;
+        position: static !important;
+        width: 100% !important;
+        padding: 16px !important;
+        margin-bottom: 0 !important;
+    }
+
+    #olxSpecsSection,
+    .olx-specs-section {
+        order: 3 !important;
+        width: 100% !important;
+        margin-bottom: 0 !important;
+    }
+
+    .olx-description-box {
+        order: 4 !important;
+        width: 100% !important;
+        margin-bottom: 12px !important;
+        padding: 16px !important;
+    }
+
+    .olx-big-price {
+        font-size: 1.8rem;
+    }
+
+    .olx-buy-btn,
+    .olx-tg-btn,
+    .order-submit-btn,
+    .reset-filters-btn {
+        width: 100% !important;
+        min-height: 48px !important;
+        display: flex !important;
+        align-items: center !important;
+        justify-content: center !important;
+        font-size: 0.95rem !important;
+    }
+
+    .form-row {
+        flex-direction: column !important;
+        gap: 12px !important;
+    }
+
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+        font-size: 16px !important;
+    }
+}
+
+/* На смартфонах (@media (max-width: 480px)): 1 велика картка в ряд */
+@media (max-width: 480px) {
+    .site-header {
+        padding: 12px 14px 4px;
+    }
+
+    .site-logo {
+        font-size: clamp(1.45rem, 5.8vw, 1.85rem) !important;
+        letter-spacing: 1.5px;
+    }
+
+    .hero-circles-container {
+        height: 75px !important;
+    }
+
+    .hero-circles-svg {
+        transform: scale(0.8) !important;
+    }
+
+    .category-card {
+        padding: 8px 12px !important;
+        font-size: 13px !important;
+    }
+
+    /* 1 велика картка в ряд (точно як стрічка в мобільному YouTube) */
+    .youtube-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+        padding: 0 14px !important;
+    }
+
+    #productDetailsModal .modal-dialog,
+    #productDetailsModal .olx-dialog,
+    #addProductModal .modal-dialog,
+    .modal-dialog,
+    .olx-dialog {
+        padding: 14px !important;
+    }
+
+    .olx-desc-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 6px;
+    }
+}
