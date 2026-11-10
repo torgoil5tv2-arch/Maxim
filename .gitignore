@@ -13,7 +13,9 @@ cloudflared.exe
 *.log
 CURRENT_LINK.txt
 
-# OS generated files
+# Deployment caches
+.vercel/
+temp_cf.yml
 .DS_Store
 Thumbs.db
 desktop.ini

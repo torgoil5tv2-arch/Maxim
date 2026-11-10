@@ -354,7 +354,10 @@ def start_cloudflare_tunnel(port=5000):
     """Прямий запуск тунелю Cloudflare через 127.0.0.1 та протокол http2."""
     global PUBLIC_TUNNEL_URL, TUNNEL_PROCESS
 
-    # Чекаємо 0.5с, щоб Flask встиг відкрити порт 127.0.0.1:{port}
+    # Гарантована затримка у 2 секунди, щоб спочатку повністю стартував Flask
+    time.sleep(2.0)
+
+    # Перевірка готовності порту 127.0.0.1:{port}
     for _ in range(30):
         try:
             with socket.create_connection(('127.0.0.1', port), timeout=0.5):
@@ -363,12 +366,15 @@ def start_cloudflare_tunnel(port=5000):
             time.sleep(0.1)
 
     try:
-        from pycloudflared.util import get_info, download
-        info = get_info()
-        if not Path(info.executable).exists():
-            download(info)
-
-        executable = info.executable
+        local_cf = os.path.join(os.path.dirname(__file__), 'cloudflared.exe')
+        if os.path.exists(local_cf):
+            executable = local_cf
+        else:
+            from pycloudflared.util import get_info, download
+            info = get_info()
+            if not Path(info.executable).exists():
+                download(info)
+            executable = info.executable
 
         # 1. Запит токена через надійний IP
         token, hostname = get_quick_tunnel_token()
@@ -377,10 +383,11 @@ def start_cloudflare_tunnel(port=5000):
                 executable,
                 '--no-autoupdate',
                 'tunnel',
+                '--url', f'http://127.0.0.1:{port}',
+                '--edge-ip-version', '4',
                 '--protocol', 'http2',
                 'run',
-                '--token', token,
-                '--url', f'http://127.0.0.1:{port}'
+                '--token', token
             ]
             TUNNEL_PROCESS = subprocess.Popen(
                 cmd,
@@ -407,6 +414,7 @@ def start_cloudflare_tunnel(port=5000):
                 executable,
                 'tunnel',
                 '--url', f'http://127.0.0.1:{port}',
+                '--edge-ip-version', '4',
                 '--protocol', 'http2',
                 '--no-autoupdate'
             ]
@@ -464,23 +472,24 @@ def start_cloudflare_tunnel(port=5000):
                         pass
 
             try:
-                with open("CURRENT_LINK.txt", "w", encoding="utf-8") as link_file:
+                current_link_path = os.path.join(os.path.dirname(__file__), "CURRENT_LINK.txt")
+                with open(current_link_path, "w", encoding="utf-8") as link_file:
                     link_file.write(f"{PUBLIC_TUNNEL_URL}\n")
             except Exception:
                 pass
 
-            print("\n=======================================================")
-            print("🌍 ПУБЛІЧНЕ ПОСИЛАННЯ НА САЙТ (CLOUDFLARE HTTP/2 TUNNEL):")
-            print(f"👉 {PUBLIC_TUNNEL_URL}")
-            print(f"🏠 Локальна адреса: http://127.0.0.1:{port}")
-            print(f"⚡ Статус тунелю: {ping_status}")
-            print("=======================================================\n")
+            print("\n=======================================================", flush=True)
+            print("🌍 ПУБЛІЧНЕ ПОСИЛАННЯ НА САЙТ (CLOUDFLARE HTTP/2 TUNNEL):", flush=True)
+            print(f"👉 {PUBLIC_TUNNEL_URL}", flush=True)
+            print(f"🏠 Локальна адреса: http://127.0.0.1:{port}", flush=True)
+            print(f"⚡ Статус тунелю: {ping_status}", flush=True)
+            print("=======================================================\n", flush=True)
         else:
-            print(f"[Увага] Не вдалося отримати адресу тунелю. Локально: http://127.0.0.1:{port}")
+            print(f"[Увага] Не вдалося отримати адресу тунелю. Локально: http://127.0.0.1:{port}", flush=True)
 
     except Exception as e:
-        print(f"[Увага] Помилка запуску Cloudflare тунелю: {e}")
-        print(f"🏠 Локальна адреса: http://127.0.0.1:{port}")
+        print(f"[Увага] Помилка запуску Cloudflare тунелю: {e}", flush=True)
+        print(f"🏠 Локальна адреса: http://127.0.0.1:{port}", flush=True)
 
 
 if __name__ == "__main__":
@@ -495,5 +504,5 @@ if __name__ == "__main__":
         tunnel_thread = threading.Thread(target=start_cloudflare_tunnel, args=(port,), daemon=True)
         tunnel_thread.start()
 
-        # Багатопотоковий сервер Flask на 127.0.0.1
-        app.run(host="127.0.0.1", port=port, debug=False, use_reloader=False, threaded=True)
+        # Багатопотоковий сервер Flask на 0.0.0.0 (слухає всі інтерфейси, локально та по Wi-Fi)
+        app.run(host="0.0.0.0", port=port, debug=False, use_reloader=False, threaded=True)
