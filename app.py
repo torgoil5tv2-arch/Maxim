@@ -32,11 +32,14 @@ class VercelPathFixMiddleware:
 
     def __call__(self, environ, start_response):
         path = environ.get("PATH_INFO", "/")
-        for prefix in ("/app.py", "/api/index.py", "/index.py", "/app"):
+        prefixes = ("/api/index.py", "/api/index", "/app.py", "/app", "/index.py", "/api.py")
+        for prefix in prefixes:
             if path == prefix:
                 path = "/"
+                break
             elif path.startswith(prefix + "/"):
                 path = path[len(prefix):]
+                break
         environ["PATH_INFO"] = path or "/"
         return self.wsgi_app(environ, start_response)
 
