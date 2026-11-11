@@ -11,11 +11,16 @@ import base64
 import http.client
 from datetime import datetime
 from pathlib import Path
-from flask import Flask, render_template, jsonify, request, Response
+from flask import Flask, render_template, jsonify, request, Response, send_from_directory
 import requests
 import html
 
-app = Flask(__name__)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+app = Flask(
+    __name__,
+    template_folder=os.path.join(BASE_DIR, "templates"),
+    static_folder=os.path.join(BASE_DIR, "static")
+)
 app.config['JSON_AS_ASCII'] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
 app.url_map.strict_slashes = False
@@ -215,6 +220,7 @@ def send_telegram_notification(order, raw_payload=None):
 
 @app.route("/")
 @app.route("/app.py")
+@app.route("/index.html")
 @app.route("/app")
 @app.route("/api/index")
 @app.route("/api/index.py")
@@ -222,6 +228,20 @@ def send_telegram_notification(order, raw_payload=None):
 def index():
     products = load_products()
     return render_template("index.html", products=products)
+
+
+@app.route('/static/<path:filename>')
+def serve_static(filename):
+    return send_from_directory(app.static_folder, filename)
+
+
+@app.errorhandler(404)
+def handle_404(e):
+    path = request.path or ""
+    # Якщо запит НЕ починається з /api/ і НЕ починається з /static/ -> ЗАВЖДИ повертаємо головну сторінку 200
+    if not path.startswith("/api/") and not path.startswith("/static/"):
+        return index(), 200
+    return jsonify({"status": "error", "message": "Not Found"}), 404
 
 
 @app.route("/api/tunnel-url")
