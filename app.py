@@ -18,6 +18,7 @@ import html
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
+app.url_map.strict_slashes = False
 
 # WSGI Middleware для коректної обробки роутингу на Vercel (автоматично нормалізує PATH_INFO)
 class PrefixMiddleware:
@@ -26,13 +27,20 @@ class PrefixMiddleware:
 
     def __call__(self, environ, start_response):
         path = environ.get("PATH_INFO", "")
-        for prefix in ("/api/index.py", "/api/index"):
-            if path.startswith(prefix):
-                path = path[len(prefix):]
-                if not path.startswith("/"):
-                    path = "/" + path
-                environ["PATH_INFO"] = path
+        # Очищаємо всі можливі артефакти роутингу Vercel (/app.py, /app, /api/index, тощо)
+        prefixes = ("/app.py", "/app", "/api/index.py", "/api/index", "/api.py")
+        for prefix in prefixes:
+            if path == prefix:
+                path = "/"
                 break
+            elif path.startswith(prefix + "/"):
+                path = path[len(prefix):]
+                break
+
+        if not path.startswith("/"):
+            path = "/" + path
+
+        environ["PATH_INFO"] = path
         return self.wsgi_app(environ, start_response)
 
 app.wsgi_app = PrefixMiddleware(app.wsgi_app)
@@ -206,6 +214,8 @@ def send_telegram_notification(order, raw_payload=None):
 
 
 @app.route("/")
+@app.route("/app.py")
+@app.route("/app")
 @app.route("/api/index")
 @app.route("/api/index.py")
 @app.route("/api")
