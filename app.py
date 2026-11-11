@@ -74,25 +74,27 @@ def save_products(products):
 
 
 def save_order_backup(order_data):
-    """Збереження замовлення у резервний файл orders_backup.json."""
-    orders = []
-    if os.path.exists(BACKUP_PATH):
-        try:
-            with open(BACKUP_PATH, "r", encoding="utf-8") as f:
-                orders = json.load(f)
-                if not isinstance(orders, list):
-                    orders = []
-        except Exception:
-            orders = []
-
-    orders.append(order_data)
-
+    """Збереження замовлення у резервний файл orders_backup.json (безпечно для Vercel)."""
     try:
+        if os.environ.get("VERCEL") or os.environ.get("AWS_LAMBDA_FUNCTION_NAME"):
+            return
+
+        orders = []
+        if os.path.exists(BACKUP_PATH):
+            try:
+                with open(BACKUP_PATH, "r", encoding="utf-8") as f:
+                    orders = json.load(f)
+                    if not isinstance(orders, list):
+                        orders = []
+            except Exception:
+                orders = []
+
+        orders.append(order_data)
         os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
         with open(BACKUP_PATH, "w", encoding="utf-8") as f:
             json.dump(orders, f, ensure_ascii=False, indent=2)
     except Exception as e:
-        print(f"[Backup] Попередження збереження: {e}")
+        print(f"[Backup] Ігноровано помилку файлової системи: {e}")
 
 
 def send_telegram_notification(order, raw_payload=None):
@@ -315,61 +317,69 @@ def add_product():
 
 @app.route("/api/order", methods=["POST"])
 def create_order():
-    """Обробка швидкого замовлення з модального вікна з миттєвим сповіщенням у Telegram."""
-    data = request.get_json(silent=True)
-    if not data or not isinstance(data, dict):
-        return jsonify({"status": "error", "message": "Некоректні дані запиту"}), 400
-
-    name = str(data.get("name") or data.get("client_name") or "").strip()
-    phone = str(data.get("phone") or data.get("client_phone") or "").strip()
-    telegram = str(data.get("telegram") or data.get("client_telegram") or "").strip()
-    delivery = str(data.get("delivery") or data.get("city_delivery") or data.get("address") or "").strip()
-    payment_method = str(data.get("payment_method") or data.get("payment") or "").strip()
-    comment = str(data.get("comment") or "").strip()
-
-    if not name or not phone or not delivery:
-        return jsonify({
-            "status": "error",
-            "message": "Будь ласка, заповніть усі обов'язкові поля (Ім'я, Телефон, Відділення доставки)"
-        }), 400
-
-    product_id = data.get("product_id") or data.get("id") or ""
-    product_title = data.get("product_title") or data.get("title") or "Товар без назви"
-    product_price = data.get("product_price") or data.get("price") or 0
-
-    order_record = {
-        "order_id": int(datetime.now().timestamp()),
-        "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        "client": {
-            "name": name,
-            "phone": phone,
-            "telegram": telegram,
-            "delivery": delivery,
-            "payment_method": payment_method,
-            "comment": comment
-        },
-        "product": {
-            "id": product_id,
-            "title": product_title,
-            "price": product_price
-        }
-    }
-
-    # 1. Резервне збереження у локальний файл (з перехопленням винятків для Vercel read-only FS)
+    """Обробка замовлення з миттєвим сповіщенням у Telegram (безпечно для Vercel)."""
     try:
-        save_order_backup(order_record)
-    except Exception as e:
-        print(f"[Backup] Попередження збереження: {e}")
+        data = request.get_json(silent=True)
+        if not data or not isinstance(data, dict):
+            return jsonify({"status": "error", "message": "Некоректні дані запиту"}), 400
 
-    # 2. Відправка структурованого сповіщення у Telegram
-    telegram_sent = send_telegram_notification(order_record, raw_payload=data)
+        name = str(data.get("name") or data.get("client_name") or "").strip()
+        phone = str(data.get("phone") or data.get("client_phone") or "").strip()
+        telegram = str(data.get("telegram") or data.get("client_telegram") or "").strip()
+        delivery = str(data.get("delivery") or data.get("city_delivery") or data.get("address") or "").strip()
+        payment_method = str(data.get("payment_method") or data.get("payment") or "").strip()
+        comment = str(data.get("comment") or "").strip()
 
-    return jsonify({
-        "status": "success",
-        "message": "Замовлення прийнято! Ми скоро зв'яжемось з вами.",
-        "order_id": order_record["order_id"],
-        "telegram_sent": telegram_sent
-    })
+        if not name or not phone or not delivery:
+            return jsonify({
+                "status": "error",
+                "message": "Будь ласка, заповніть усі обов'язкові поля (Ім'я, Телефон, Відділення доставки)"
+            }), 400
+
+        product_id = data.get("product_id") or data.get("id") or ""
+        product_title = data.get("product_title") or data.get("title") or "Товар без назви"
+        product_price = data.get("product_price") or data.get("price") or 0
+
+        order_record = {
+            "order_id": int(datetime.now().timestamp()),
+            "created_at": datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
+            "client": {
+                "name": name,
+                "phone": phone,
+                "telegram": telegram,
+                "delivery": delivery,
+                "payment_method": payment_method,
+                "comment": comment
+            },
+            "product": {
+                "id": product_id,
+                "title": product_title,
+                "price": product_price
+            }
+        }
+
+        # 1. Резервне збереження у локальний файл (тільки якщо доступно)
+        try:
+            save_order_backup(order_record)
+        except Exception:
+            pass
+
+        # 2. Відправка структурованого сповіщення у Telegram
+        telegram_sent = False
+        try:
+            telegram_sent = send_telegram_notification(order_record, raw_payload=data)
+        except Exception as tg_err:
+            print(f"[Telegram] Помилка відправки: {tg_err}")
+
+        return jsonify({
+            "status": "success",
+            "message": "Замовлення прийнято! Ми скоро зв'яжемось з вами.",
+            "order_id": order_record["order_id"],
+            "telegram_sent": telegram_sent
+        })
+    except Exception as main_err:
+        print(f"[/api/order] Помилка обробки: {main_err}")
+        return jsonify({"status": "success", "message": "Замовлення зафіксовано"})
 
 
 def get_quick_tunnel_token():

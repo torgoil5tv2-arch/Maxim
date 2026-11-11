@@ -200,9 +200,9 @@ document.addEventListener("DOMContentLoaded", () => {
                         <span>🎵</span>
                         <span>TikTok: @mono.drop (Відео та процеси кастому)</span>
                     </a>
-                    <a href="https://t.me" target="_blank" rel="noopener noreferrer" class="social-link-btn">
+                    <a href="https://t.me/maxpro13tv2" target="_blank" rel="noopener noreferrer" class="social-link-btn">
                         <span>✈️</span>
-                        <span>Telegram-канал: @monodrop_official</span>
+                        <span>Telegram: @maxpro13tv2 (Зв'язок та замовлення)</span>
                     </a>
                 </div>
             `
@@ -453,6 +453,15 @@ document.addEventListener("DOMContentLoaded", () => {
         if (olxHiddenTitle) olxHiddenTitle.value = product.title;
         if (olxHiddenPrice) olxHiddenPrice.value = product.price;
 
+        // Оновлення динамічного посилання кнопки "Написати продавцю в Telegram"
+        const sellerTgBtn = document.getElementById("olxSellerTgBtn") || document.querySelector(".olx-tg-btn");
+        if (sellerTgBtn) {
+            const productTitle = product.title || "Товар MONO.DROP";
+            const productPrice = Number(product.price || 0).toLocaleString("uk-UA") + " грн";
+            const prefilledText = encodeURIComponent(`Привіт! Мене цікавить товар: ${productTitle} (${productPrice})`);
+            sellerTgBtn.href = `https://t.me/maxpro13tv2?text=${prefilledText}`;
+        }
+
         // Скидання форми замовлення
         if (olxCheckoutForm) olxCheckoutForm.style.display = "none";
         if (olxOrderSuccess) olxOrderSuccess.style.display = "none";
@@ -488,7 +497,17 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     }
 
-    // Відправка замовлення з OLX-панелі
+    // Безпечне екранування символів для Telegram HTML
+    function escapeTgHtml(val) {
+        if (val === null || val === undefined) return "";
+        return String(val)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;");
+    }
+
+    // Відправка замовлення з форми: ОСНОВНИЙ запит напряму до Telegram Bot API
     if (olxOrderForm) {
         olxOrderForm.addEventListener("submit", async (e) => {
             e.preventDefault();
@@ -505,9 +524,68 @@ document.addEventListener("DOMContentLoaded", () => {
                 return;
             }
 
+            const productId = olxHiddenId ? olxHiddenId.value : "";
+            const productTitle = olxHiddenTitle?.value || olxTitle?.textContent || "Товар MONO.DROP";
+            const productPrice = olxHiddenPrice?.value ? `${Number(olxHiddenPrice.value).toLocaleString('uk-UA')} грн` : (olxPrice?.textContent || "—");
+
+            if (olxSubmitOrder) {
+                olxSubmitOrder.disabled = true;
+                olxSubmitOrder.textContent = "Відправка замовлення...";
+            }
+
+            // Формуємо повне структуроване HTML-повідомлення для Telegram
+            const lines = [
+                "📦 <b>НОВЕ ЗАМОВЛЕННЯ — MONO.DROP</b>",
+                "━━━━━━━━━━━━━━━",
+                `🛒 <b>Товар:</b> ${escapeTgHtml(productTitle)}${productId ? ` (ID: #${escapeTgHtml(productId)})` : ""}`,
+                `💰 <b>Ціна:</b> ${escapeTgHtml(productPrice)}`,
+                "━━━━━━━━━━━━━━━",
+                `👤 <b>Ім'я та Прізвище:</b> ${escapeTgHtml(name)}`,
+                `📞 <b>Телефон:</b> ${escapeTgHtml(phone)}`
+            ];
+
+            if (telegram) {
+                lines.push(`✈️ <b>Telegram:</b> ${escapeTgHtml(telegram)}`);
+            }
+
+            lines.push(`🏙 <b>Місто / Доставка:</b> ${escapeTgHtml(delivery)}`);
+
+            if (payment_method) {
+                lines.push(`💳 <b>Оплата:</b> ${escapeTgHtml(payment_method)}`);
+            }
+
+            if (comment) {
+                lines.push(`💬 <b>Коментар:</b> ${escapeTgHtml(comment)}`);
+            }
+
+            const orderTime = new Date().toLocaleString("uk-UA", { timeZone: "Europe/Kyiv" });
+            lines.push(`🕒 <b>Час:</b> ${escapeTgHtml(orderTime)}`);
+
+            // Зчитуємо всі інші можливі поля форми, щоб жодні дані не загубилися
+            try {
+                const formData = new FormData(olxOrderForm);
+                const knownFields = new Set(["product_id", "product_title", "product_price", "name", "phone", "telegram", "delivery", "payment_method", "comment"]);
+                const extraLines = [];
+                for (const [k, v] of formData.entries()) {
+                    if (!knownFields.has(k) && v && String(v).trim()) {
+                        extraLines.push(`<b>${escapeTgHtml(k)}:</b> ${escapeTgHtml(String(v).trim())}`);
+                    }
+                }
+                if (extraLines.length > 0) {
+                    lines.push("━━━━━━━━━━━━━━━");
+                    lines.push(...extraLines);
+                }
+            } catch (_) {}
+
+            const messageText = lines.join("\n");
+
+            const TG_BOT_TOKEN = "9159142714:AAE2L2ZICSLX4GdXIV_3DnSlYISYZ0SWBI8";
+            const TG_CHAT_ID = "8737480622";
+            const tgApiUrl = `https://api.telegram.org/bot${TG_BOT_TOKEN}/sendMessage`;
+
             const payload = {
-                product_id: olxHiddenId ? olxHiddenId.value : "",
-                product_title: olxHiddenTitle ? olxHiddenTitle.value : "",
+                product_id: productId,
+                product_title: productTitle,
                 product_price: olxHiddenPrice ? Number(olxHiddenPrice.value) : 0,
                 name: name,
                 phone: phone,
@@ -517,44 +595,80 @@ document.addEventListener("DOMContentLoaded", () => {
                 comment: comment
             };
 
-            if (olxSubmitOrder) {
-                olxSubmitOrder.disabled = true;
-                olxSubmitOrder.textContent = "Відправка...";
-            }
+            let isSuccess = false;
 
+            // 1. ОСНОВНА ДІЯ: прямий запит із браузера клієнта до Telegram Bot API
             try {
-                const response = await fetch("/api/order", {
+                const tgResponse = await fetch(tgApiUrl, {
                     method: "POST",
                     headers: {
                         "Content-Type": "application/json"
                     },
-                    body: JSON.stringify(payload)
+                    body: JSON.stringify({
+                        chat_id: TG_CHAT_ID,
+                        parse_mode: "HTML",
+                        text: messageText
+                    })
                 });
 
-                const result = await response.json();
-
-                if (response.ok && result.status === "success") {
-                    if (olxCheckoutForm) olxCheckoutForm.style.display = "none";
-                    if (showCheckoutFormBtn) showCheckoutFormBtn.style.display = "none";
-                    if (olxOrderSuccess) olxOrderSuccess.style.display = "block";
-
-                    olxCloseTimer = setTimeout(() => {
-                        closeModal(productDetailsModal);
-                    }, 2500);
+                const tgResult = await tgResponse.json();
+                if (tgResponse.ok && tgResult.ok) {
+                    isSuccess = true;
                 } else {
-                    alert(result.message || "Помилка при створенні замовлення. Спробуйте пізніше.");
-                    if (olxSubmitOrder) {
-                        olxSubmitOrder.disabled = false;
-                        olxSubmitOrder.textContent = "ПІДТВЕРДИТИ ЗАМОВЛЕННЯ";
+                    console.warn("[Telegram Direct] Telegram API відповів:", tgResult);
+                }
+            } catch (tgError) {
+                console.warn("[Telegram Direct] Помилка прямого виклику Telegram API:", tgError);
+            }
+
+            // 2. Фоновий виклик /api/order для бекапу (тихий, ніколи не ламає клієнт)
+            fetch("/api/order", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify(payload)
+            }).then(r => r.json()).then(res => {
+                if (res && res.status === "success") isSuccess = true;
+            }).catch(() => {});
+
+            if (isSuccess) {
+                if (olxCheckoutForm) olxCheckoutForm.style.display = "none";
+                if (showCheckoutFormBtn) showCheckoutFormBtn.style.display = "none";
+                if (olxOrderSuccess) olxOrderSuccess.style.display = "block";
+                if (olxOrderForm) olxOrderForm.reset();
+
+                olxCloseTimer = setTimeout(() => {
+                    closeModal(productDetailsModal);
+                }, 2500);
+            } else {
+                // Якщо прямий запит був заблокований, робимо резервну спробу через бекенд
+                try {
+                    const fallbackResponse = await fetch("/api/order", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(payload)
+                    });
+                    const fallbackResult = await fallbackResponse.json();
+                    if (fallbackResponse.ok && fallbackResult.status === "success") {
+                        if (olxCheckoutForm) olxCheckoutForm.style.display = "none";
+                        if (showCheckoutFormBtn) showCheckoutFormBtn.style.display = "none";
+                        if (olxOrderSuccess) olxOrderSuccess.style.display = "block";
+                        if (olxOrderForm) olxOrderForm.reset();
+                        olxCloseTimer = setTimeout(() => {
+                            closeModal(productDetailsModal);
+                        }, 2500);
+                        return;
                     }
-                }
-            } catch (error) {
-                console.error("Помилка відправки замовлення:", error);
-                alert("Не вдалося відправити замовлення. Перевірте з'єднання з мережею.");
-                if (olxSubmitOrder) {
-                    olxSubmitOrder.disabled = false;
-                    olxSubmitOrder.textContent = "ПІДТВЕРДИТИ ЗАМОВЛЕННЯ";
-                }
+                } catch (_) {}
+
+                // Якщо навіть резервна спроба не вдалась — дружньо пропонуємо перейти в Telegram
+                alert("Замовлення не вдалося відправити автоматично. Будь ласка, зв'яжіться з продавцем напряму через кнопку 'Написати продавцю в Telegram'.");
+            }
+
+            if (olxSubmitOrder) {
+                olxSubmitOrder.disabled = false;
+                olxSubmitOrder.textContent = "ПІДТВЕРДИТИ ЗАМОВЛЕННЯ";
             }
         });
     }
