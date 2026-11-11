@@ -13,6 +13,7 @@ from datetime import datetime
 from pathlib import Path
 from flask import Flask, render_template, jsonify, request, Response
 import requests
+import html
 
 app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
@@ -26,8 +27,8 @@ DATA_PATH = os.path.join(os.path.dirname(__file__), 'data', 'products.json')
 BACKUP_PATH = os.path.join(os.path.dirname(__file__), 'data', 'orders_backup.json')
 
 # Константи Telegram Bot API (завантажуються з env зі зрозумілими заглушками)
-TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "YOUR_BOT_TOKEN")
-TELEGRAM_CHAT_ID = os.getenv("TELEGRAM_CHAT_ID", "YOUR_CHAT_ID")
+TELEGRAM_BOT_TOKEN = os.environ.get("TELEGRAM_BOT_TOKEN", "9159142714:AAE2L2ZICSLX4GdXIV_3DnSlYISYZ0SWBI8")
+TELEGRAM_CHAT_ID = os.environ.get("TELEGRAM_CHAT_ID", "8737480622")
 
 # Категорії товарів: відповідність ID до української назви та іконки
 CATEGORY_MAP = {
@@ -86,36 +87,82 @@ def save_order_backup(order_data):
 
     orders.append(order_data)
 
-    os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
-    with open(BACKUP_PATH, "w", encoding="utf-8") as f:
-        json.dump(orders, f, ensure_ascii=False, indent=2)
+    try:
+        os.makedirs(os.path.dirname(BACKUP_PATH), exist_ok=True)
+        with open(BACKUP_PATH, "w", encoding="utf-8") as f:
+            json.dump(orders, f, ensure_ascii=False, indent=2)
+    except Exception as e:
+        print(f"[Backup] Попередження збереження: {e}")
 
 
-def send_telegram_notification(order):
-    """Відправка повідомлення про замовлення у Telegram-чат."""
+def send_telegram_notification(order, raw_payload=None):
+    """Відправка повного структурованого повідомлення про замовлення у Telegram-чат."""
     token = TELEGRAM_BOT_TOKEN.strip()
     chat_id = TELEGRAM_CHAT_ID.strip()
 
-    if not token or not chat_id or token == "YOUR_BOT_TOKEN" or chat_id == "YOUR_CHAT_ID":
-        print("[Telegram] Пропущено відправку: токен або chat_id не налаштовані.")
+    if not token or not chat_id:
+        print("[Telegram] Помилка: токен або chat_id не налаштовані.")
         return False
 
     client = order.get("client", {})
     product = order.get("product", {})
-    timestamp = order.get("created_at", datetime.now().strftime("%Y-%m-%d %H:%M:%S"))
+    timestamp = order.get("created_at") or datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-    comment_text = client.get("comment") or "—"
+    # Екранування всіх користувацьких даних для parse_mode="HTML"
+    p_title = html.escape(str(product.get("title") or "Товар без назви"))
+    p_id = html.escape(str(product.get("id") or "-"))
+    p_price = html.escape(str(product.get("price") or 0))
 
-    message_text = (
-        f"🛍 <b>НОВЕ ЗАМОВЛЕННЯ — MONO.DROP</b>\n\n"
-        f"📦 <b>Товар:</b> {product.get('title', 'Невідомо')} (ID: #{product.get('id', '-')})\n"
-        f"💰 <b>Ціна:</b> {product.get('price', '-')} ₴\n\n"
-        f"👤 <b>Клієнт:</b> {client.get('name', 'Не вказано')}\n"
-        f"📞 <b>Телефон:</b> {client.get('phone', 'Не вказано')}\n"
-        f"📍 <b>Доставка:</b> {client.get('delivery', 'Не вказано')}\n"
-        f"💬 <b>Коментар / ТГ:</b> {comment_text}\n"
-        f"🕒 <b>Час:</b> {timestamp}"
-    )
+    c_name = html.escape(str(client.get("name") or "Не вказано"))
+    c_phone = html.escape(str(client.get("phone") or "Не вказано"))
+    c_telegram = html.escape(str(client.get("telegram") or ""))
+    c_delivery = html.escape(str(client.get("delivery") or "Не вказано"))
+    c_payment = html.escape(str(client.get("payment_method") or ""))
+    c_comment = html.escape(str(client.get("comment") or ""))
+
+    lines = [
+        "📦 <b>НОВЕ ЗАМОВЛЕННЯ — MONO.DROP</b>",
+        "━━━━━━━━━━━━━━━",
+        f"🛒 <b>Товар:</b> {p_title} (ID: {p_id})",
+        f"💰 <b>Ціна:</b> {p_price} грн",
+        "━━━━━━━━━━━━━━━",
+        f"👤 <b>Клієнт:</b> {c_name}",
+        f"📞 <b>Телефон:</b> {c_phone}"
+    ]
+
+    if c_telegram and c_telegram != "—":
+        lines.append(f"✈️ <b>Telegram / Контакт:</b> {c_telegram}")
+
+    lines.append(f"🏙 <b>Місто / Доставка:</b> {c_delivery}")
+
+    if c_payment and c_payment != "—":
+        lines.append(f"💳 <b>Оплата:</b> {c_payment}")
+
+    if c_comment and c_comment != "—":
+        lines.append(f"💬 <b>Коментар:</b> {c_comment}")
+
+    lines.append(f"🕒 <b>Час:</b> {timestamp}")
+
+    # Додатковий цикл: якщо прийшли невідомі поля з форми, записуємо їх у кінець
+    known_keys = {
+        "product_id", "product_title", "product_price", "id", "title", "price",
+        "name", "client_name", "phone", "client_phone", "telegram", "client_telegram",
+        "delivery", "city_delivery", "city", "address", "warehouse",
+        "payment_method", "payment", "comment", "order_id", "created_at", "client", "product"
+    }
+
+    if raw_payload and isinstance(raw_payload, dict):
+        extra_lines = []
+        for k, v in raw_payload.items():
+            if k not in known_keys and v:
+                clean_k = html.escape(str(k))
+                clean_v = html.escape(str(v))
+                extra_lines.append(f"<b>{clean_k}:</b> {clean_v}")
+        if extra_lines:
+            lines.append("━━━━━━━━━━━━━━━")
+            lines.extend(extra_lines)
+
+    message_text = "\n".join(lines)
 
     url = f"https://api.telegram.org/bot{token}/sendMessage"
     payload = {
@@ -125,9 +172,10 @@ def send_telegram_notification(order):
     }
 
     try:
-        response = requests.post(url, json=payload, timeout=5)
-        if response.status_code == 200:
-            print("[Telegram] Повідомлення успішно відправлено.")
+        response = requests.post(url, json=payload, timeout=10)
+        res_json = response.json()
+        if response.status_code == 200 and res_json.get("ok"):
+            print(f"[Telegram] Замовлення #{order.get('order_id')} успішно відправлено у Telegram.")
             return True
         else:
             print(f"[Telegram] Помилка відправки: {response.status_code} {response.text}")
@@ -267,21 +315,27 @@ def add_product():
 
 @app.route("/api/order", methods=["POST"])
 def create_order():
-    """Обробка швидкого замовлення з модального вікна."""
+    """Обробка швидкого замовлення з модального вікна з миттєвим сповіщенням у Telegram."""
     data = request.get_json(silent=True)
-    if not data:
+    if not data or not isinstance(data, dict):
         return jsonify({"status": "error", "message": "Некоректні дані запиту"}), 400
 
-    name = str(data.get("name", "")).strip()
-    phone = str(data.get("phone", "")).strip()
-    delivery = str(data.get("delivery", "")).strip()
-    comment = str(data.get("comment", "")).strip()
+    name = str(data.get("name") or data.get("client_name") or "").strip()
+    phone = str(data.get("phone") or data.get("client_phone") or "").strip()
+    telegram = str(data.get("telegram") or data.get("client_telegram") or "").strip()
+    delivery = str(data.get("delivery") or data.get("city_delivery") or data.get("address") or "").strip()
+    payment_method = str(data.get("payment_method") or data.get("payment") or "").strip()
+    comment = str(data.get("comment") or "").strip()
 
     if not name or not phone or not delivery:
         return jsonify({
             "status": "error",
-            "message": "Будь ласка, заповніть усі обов'язкові поля (Ім'я, Телефон, Відділення НП)"
+            "message": "Будь ласка, заповніть усі обов'язкові поля (Ім'я, Телефон, Відділення доставки)"
         }), 400
+
+    product_id = data.get("product_id") or data.get("id") or ""
+    product_title = data.get("product_title") or data.get("title") or "Товар без назви"
+    product_price = data.get("product_price") or data.get("price") or 0
 
     order_record = {
         "order_id": int(datetime.now().timestamp()),
@@ -289,23 +343,33 @@ def create_order():
         "client": {
             "name": name,
             "phone": phone,
+            "telegram": telegram,
             "delivery": delivery,
+            "payment_method": payment_method,
             "comment": comment
         },
         "product": {
-            "id": data.get("product_id"),
-            "title": data.get("product_title", "Без назви"),
-            "price": data.get("product_price", 0)
+            "id": product_id,
+            "title": product_title,
+            "price": product_price
         }
     }
 
-    # 1. Резервне збереження у локальний файл
-    save_order_backup(order_record)
+    # 1. Резервне збереження у локальний файл (з перехопленням винятків для Vercel read-only FS)
+    try:
+        save_order_backup(order_record)
+    except Exception as e:
+        print(f"[Backup] Попередження збереження: {e}")
 
-    # 2. Відправка у Telegram (якщо налаштовано)
-    send_telegram_notification(order_record)
+    # 2. Відправка структурованого сповіщення у Telegram
+    telegram_sent = send_telegram_notification(order_record, raw_payload=data)
 
-    return jsonify({"status": "success", "message": "Замовлення прийнято!"})
+    return jsonify({
+        "status": "success",
+        "message": "Замовлення прийнято! Ми скоро зв'яжемось з вами.",
+        "order_id": order_record["order_id"],
+        "telegram_sent": telegram_sent
+    })
 
 
 def get_quick_tunnel_token():

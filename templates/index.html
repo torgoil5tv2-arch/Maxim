@@ -350,25 +350,44 @@
                         <!-- Вбудована форма замовлення (прихована за замовчуванням) -->
                         <div id="olxCheckoutForm" class="olx-checkout-form" style="display:none;">
                             <form id="olxOrderForm" class="order-form">
-                                <input type="hidden" id="olxHiddenId">
-                                <input type="hidden" id="olxHiddenTitle">
-                                <input type="hidden" id="olxHiddenPrice">
+                                <input type="hidden" id="olxHiddenId" name="product_id">
+                                <input type="hidden" id="olxHiddenTitle" name="product_title">
+                                <input type="hidden" id="olxHiddenPrice" name="product_price">
+                                
                                 <div class="form-group">
                                     <label for="olxClientName">Ім'я та Прізвище <span class="req">*</span></label>
-                                    <input type="text" id="olxClientName" placeholder="Олександр Петренко" required>
+                                    <input type="text" id="olxClientName" name="name" placeholder="Олександр Петренко" required autocomplete="name">
                                 </div>
+                                
                                 <div class="form-group">
                                     <label for="olxClientPhone">Номер телефону <span class="req">*</span></label>
-                                    <input type="tel" id="olxClientPhone" placeholder="+380..." required>
+                                    <input type="tel" id="olxClientPhone" name="phone" placeholder="+380..." required autocomplete="tel">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="olxClientDelivery">Місто та відділення НП <span class="req">*</span></label>
-                                    <input type="text" id="olxClientDelivery" placeholder="м. Київ, відділення №12" required>
+                                    <label for="olxClientTelegram">Telegram / нікнейм</label>
+                                    <input type="text" id="olxClientTelegram" name="telegram" placeholder="@username">
                                 </div>
+
                                 <div class="form-group">
-                                    <label for="olxClientComment">Коментар / Telegram-нік</label>
-                                    <input type="text" id="olxClientComment" placeholder="@username або побажання">
+                                    <label for="olxClientDelivery">Місто та відділення НП / адреса <span class="req">*</span></label>
+                                    <input type="text" id="olxClientDelivery" name="delivery" placeholder="м. Київ, відділення №12" required>
                                 </div>
+
+                                <div class="form-group">
+                                    <label for="olxPaymentMethod">Спосіб оплати</label>
+                                    <select id="olxPaymentMethod" name="payment_method" class="form-select">
+                                        <option value="Накладений платіж (при отриманні)">Накладений платіж (при отриманні)</option>
+                                        <option value="Оплата на картку (IBAN / Монобанк)">Оплата на картку (IBAN / Монобанк)</option>
+                                        <option value="Безпечна доставка">Безпечна доставка</option>
+                                    </select>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="olxClientComment">Коментар до замовлення</label>
+                                    <input type="text" id="olxClientComment" name="comment" placeholder="Побажання, розмір або уточнення">
+                                </div>
+
                                 <button type="submit" id="olxSubmitOrder" class="order-submit-btn">ПІДТВЕРДИТИ ЗАМОВЛЕННЯ</button>
                             </form>
                         </div>

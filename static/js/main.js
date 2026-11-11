@@ -495,11 +495,13 @@ document.addEventListener("DOMContentLoaded", () => {
 
             const name = document.getElementById("olxClientName")?.value.trim() || "";
             const phone = document.getElementById("olxClientPhone")?.value.trim() || "";
+            const telegram = document.getElementById("olxClientTelegram")?.value.trim() || "";
             const delivery = document.getElementById("olxClientDelivery")?.value.trim() || "";
+            const payment_method = document.getElementById("olxPaymentMethod")?.value.trim() || "Накладений платіж";
             const comment = document.getElementById("olxClientComment")?.value.trim() || "";
 
             if (!name || !phone || !delivery) {
-                alert("Будь ласка, заповніть обов'язкові поля: Ім'я, Номер телефону та Нову Пошту.");
+                alert("Будь ласка, заповніть обов'язкові поля: Ім'я, Номер телефону та Відділення доставки.");
                 return;
             }
 
@@ -509,7 +511,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 product_price: olxHiddenPrice ? Number(olxHiddenPrice.value) : 0,
                 name: name,
                 phone: phone,
+                telegram: telegram,
                 delivery: delivery,
+                payment_method: payment_method,
                 comment: comment
             };
 
