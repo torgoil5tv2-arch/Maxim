@@ -86,15 +86,57 @@ def add_performance_and_caching_headers(response):
     return response
 
 
+DEFAULT_PRODUCTS = [
+    {
+        "id": "1",
+        "title": "Худі 'Cyberpunk Glitch' Custom Edition",
+        "price": 2800,
+        "category": "clothing",
+        "thumbnail": "https://images.unsplash.com/photo-1556905055-8f358a7a47b2?w=800&q=80",
+        "description": "Ексклюзивне худі ручної роботи з рефлективними елементами та кіберпанк стилістикою.",
+        "specs": ["Матеріал: 100% преміум бавовна", "Друк: Стійкий шовкотрафарет + рефлектив", "Розмір: Oversize"]
+    },
+    {
+        "id": "2",
+        "title": "Годинник 'VFD Cyber Watch' Mod v2",
+        "price": 4500,
+        "category": "watches",
+        "thumbnail": "https://images.unsplash.com/photo-1524805444758-089113d48a6d?w=800&q=80",
+        "description": "Модифікований наручний годинник на люмінесцентних індикаторах.",
+        "specs": ["Корпус: Анодований алюміній", "Акумулятор: до 7 днів роботи", "Скло: Сапфірове"]
+    },
+    {
+        "id": "3",
+        "title": "Світильник 'Matrix Core' LED Lamp",
+        "price": 1950,
+        "category": "lamps",
+        "thumbnail": "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?w=800&q=80",
+        "description": "Атмосферний кібер-світильник з неоновою анімацією та керуванням зі смартфона.",
+        "specs": ["Живлення: USB Type-C", "Підсвітка: Адресні світлодіоди WS2812B", "Режими: 50+ ефектів"]
+    },
+    {
+        "id": "4",
+        "title": "Павербанк 'Heavy Power 30000' 65W PD",
+        "price": 3200,
+        "category": "accumulators",
+        "thumbnail": "https://images.unsplash.com/photo-1609091839311-d5365f9ff1c5?w=800&q=80",
+        "description": "Потужний кастомний акумуляторний блок для зарядки ноутбуків та гаджетів.",
+        "specs": ["Ємність: 30000 mAh", "Вихідна потужність: до 65W", "Елементи: Оригінальні 21700"]
+    }
+]
+
+
 def load_products():
-    """Завантаження списку товарів з файлу products.json."""
-    if not os.path.exists(DATA_PATH):
-        return []
-    with open(DATA_PATH, "r", encoding="utf-8") as f:
-        try:
-            return json.load(f)
-        except Exception:
-            return []
+    """Завантаження списку товарів з файлу products.json із надійним фолбеком."""
+    try:
+        if os.path.exists(DATA_PATH):
+            with open(DATA_PATH, "r", encoding="utf-8") as f:
+                data = json.load(f)
+                if isinstance(data, list) and len(data) > 0:
+                    return data
+    except Exception as e:
+        print(f"[Products] Помилка читання products.json: {e}")
+    return DEFAULT_PRODUCTS
 
 
 def save_products(products):
@@ -236,12 +278,15 @@ def serve_static(filename):
 
 
 @app.errorhandler(404)
-def handle_404(e):
-    path = request.path or ""
-    # Якщо запит НЕ починається з /api/ і НЕ починається з /static/ -> ЗАВЖДИ повертаємо головну сторінку 200
-    if not path.startswith("/api/") and not path.startswith("/static/"):
-        return index(), 200
-    return jsonify({"status": "error", "message": "Not Found"}), 404
+def catch_all_404(e):
+    # Якщо запит йде до статики, спробуємо знайти та віддати файл
+    if request.path.startswith('/static/'):
+        try:
+            return send_from_directory(app.static_folder, request.path[len('/static/'):])
+        except Exception:
+            return jsonify({"status": "error", "message": "Static file not found"}), 404
+    # Для будь-якого іншого шляху на Vercel (/, /app.py, /index.html тощо) завжди віддаємо головну сторінку магазину зі статусом 200!
+    return index(), 200
 
 
 @app.route("/api/tunnel-url")
