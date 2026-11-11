@@ -19,6 +19,24 @@ app = Flask(__name__)
 app.config['JSON_AS_ASCII'] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
 
+# WSGI Middleware для коректної обробки роутингу на Vercel (автоматично нормалізує PATH_INFO)
+class PrefixMiddleware:
+    def __init__(self, wsgi_app):
+        self.wsgi_app = wsgi_app
+
+    def __call__(self, environ, start_response):
+        path = environ.get("PATH_INFO", "")
+        for prefix in ("/api/index.py", "/api/index"):
+            if path.startswith(prefix):
+                path = path[len(prefix):]
+                if not path.startswith("/"):
+                    path = "/" + path
+                environ["PATH_INFO"] = path
+                break
+        return self.wsgi_app(environ, start_response)
+
+app.wsgi_app = PrefixMiddleware(app.wsgi_app)
+
 # Секретний PIN адміністратора для додавання товарів
 ADMIN_PIN = os.getenv("ADMIN_PIN", "7777")
 
@@ -188,6 +206,9 @@ def send_telegram_notification(order, raw_payload=None):
 
 
 @app.route("/")
+@app.route("/api/index")
+@app.route("/api/index.py")
+@app.route("/api")
 def index():
     products = load_products()
     return render_template("index.html", products=products)
