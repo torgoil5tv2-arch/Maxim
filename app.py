@@ -25,30 +25,22 @@ app.config['JSON_AS_ASCII'] = False
 app.config['SEND_FILE_MAX_AGE_DEFAULT'] = 86400
 app.url_map.strict_slashes = False
 
-# WSGI Middleware для коректної обробки роутингу на Vercel (автоматично нормалізує PATH_INFO)
-class PrefixMiddleware:
+# WSGI Middleware для коректної обробки роутингу на Vercel (очищає PATH_INFO від префіксів /app.py, /api/index.py)
+class VercelPathFixMiddleware:
     def __init__(self, wsgi_app):
         self.wsgi_app = wsgi_app
 
     def __call__(self, environ, start_response):
-        path = environ.get("PATH_INFO", "")
-        # Очищаємо всі можливі артефакти роутингу Vercel (/app.py, /app, /api/index, тощо)
-        prefixes = ("/app.py", "/app", "/api/index.py", "/api/index", "/api.py")
-        for prefix in prefixes:
+        path = environ.get("PATH_INFO", "/")
+        for prefix in ("/app.py", "/api/index.py", "/index.py", "/app"):
             if path == prefix:
                 path = "/"
-                break
             elif path.startswith(prefix + "/"):
                 path = path[len(prefix):]
-                break
-
-        if not path.startswith("/"):
-            path = "/" + path
-
-        environ["PATH_INFO"] = path
+        environ["PATH_INFO"] = path or "/"
         return self.wsgi_app(environ, start_response)
 
-app.wsgi_app = PrefixMiddleware(app.wsgi_app)
+app.wsgi_app = VercelPathFixMiddleware(app.wsgi_app)
 
 # Секретний PIN адміністратора для додавання товарів
 ADMIN_PIN = os.getenv("ADMIN_PIN", "7777")
@@ -279,12 +271,16 @@ def serve_static(filename):
 
 @app.errorhandler(404)
 def catch_all_404(e):
+    path = request.path or ""
     # Якщо запит йде до статики, спробуємо знайти та віддати файл
-    if request.path.startswith('/static/'):
+    if path.startswith('/static/'):
         try:
-            return send_from_directory(app.static_folder, request.path[len('/static/'):])
+            return send_from_directory(app.static_folder, path[len('/static/'):])
         except Exception:
             return jsonify({"status": "error", "message": "Static file not found"}), 404
+    # Якщо це API-запит, повертаємо JSON 404
+    if path.startswith('/api/'):
+        return jsonify({"status": "error", "message": "API endpoint not found"}), 404
     # Для будь-якого іншого шляху на Vercel (/, /app.py, /index.html тощо) завжди віддаємо головну сторінку магазину зі статусом 200!
     return index(), 200
 
