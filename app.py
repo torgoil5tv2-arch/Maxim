@@ -459,7 +459,17 @@ def create_order():
         except Exception:
             pass
 
-        # 2. Відправка структурованого сповіщення у Telegram
+        # Якщо клієнт вже успішно надіслав повідомлення напряму в Telegram API
+        if data.get("telegram_sent") is True or str(data.get("telegram_sent")).lower() == "true":
+            return jsonify({
+                "status": "success",
+                "ok": True,
+                "message": "Замовлення прийнято! Ми скоро зв'яжемось з вами.",
+                "order_id": order_record["order_id"],
+                "telegram_sent": True
+            }), 200
+
+        # 2. Резервна відправка структурованого сповіщення у Telegram (fallback)
         telegram_sent = False
         try:
             telegram_sent = send_telegram_notification(order_record, raw_payload=data)
@@ -468,10 +478,11 @@ def create_order():
 
         return jsonify({
             "status": "success",
+            "ok": True,
             "message": "Замовлення прийнято! Ми скоро зв'яжемось з вами.",
             "order_id": order_record["order_id"],
             "telegram_sent": telegram_sent
-        })
+        }), 200
     except Exception as main_err:
         print(f"[/api/order] Помилка обробки: {main_err}")
         return jsonify({"status": "success", "message": "Замовлення зафіксовано"})
